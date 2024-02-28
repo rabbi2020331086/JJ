@@ -1,0 +1,165 @@
+<!-- layout_create_account.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="92dp"
+            android:layout_height="109dp"
+            android:background="@drawable/logo" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/jj"
+            android:textSize="35sp"
+            android:textAlignment="center"
+            android:fontFamily="@font/kellyslab"
+            android:textColor="#0DCDD9"/>
+    </LinearLayout>
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="50dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="10dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create your account"
+                android:textSize="25sp"
+                android:layout_marginVertical="10dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/create_account_name_layout"
+                app:boxStrokeWidth="2dp"
+                android:hint="Name"
+                android:textColorHint="@color/black"
+                app:hintTextColor="#0DCDD9">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/create_account_name_edit"
+                    android:background="@drawable/text_field"
+                    android:layout_height="48dp"
+                    android:textColor="@color/black"
+                    android:paddingHorizontal="20dp"
+                    android:inputType="text"
+                    android:imeOptions="actionDone"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:id="@+id/create_account_email_layout"
+                android:layout_height="wrap_content"
+                app:boxStrokeWidth="2dp"
+                android:hint="Email" android:layout_marginTop="5dp"
+                android:textColorHint="@color/black"
+                app:hintTextColor="#0DCDD9">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/create_account_email_edit"
+                    android:background="@drawable/text_field"
+                    android:layout_height="48dp"
+                    android:textColor="@color/black"
+                    android:paddingHorizontal="20dp"
+                    android:inputType="textEmailAddress"
+                    android:imeOptions="actionDone"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxStrokeWidth="2dp"
+                android:id="@+id/create_account_password_layout"
+                android:hint="Password"
+                android:layout_marginTop="5dp"
+                android:textColorHint="@color/black"
+                app:hintTextColor="#0DCDD9">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/create_account_password_edit"
+                    android:background="@drawable/text_field"
+                    android:layout_height="48dp"
+                    android:textColor="@color/black"
+                    android:paddingHorizontal="20dp"
+                    android:inputType="textPassword"
+                    android:imeOptions="actionDone"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxStrokeWidth="2dp"
+                android:hint="Retype password"
+                android:layout_marginTop="5dp"
+                android:textColorHint="@color/black"
+                app:hintTextColor="#0DCDD9">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:background="@drawable/text_field"
+                    android:id="@+id/create_account_retype_password"
+                    android:layout_height="48dp"
+                    android:textColor="@color/black"
+                    android:paddingHorizontal="20dp"
+                    android:inputType="textPassword"
+                    android:imeOptions="actionDone"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/create_account_term"
+                android:textColor="#5B5B5B"
+                android:textSize="15sp"
+                android:lineSpacingExtra="4dp"
+                android:layout_marginTop="10dp"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Create account"
+                android:layout_marginTop="20dp"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:background="@drawable/button"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:id="@+id/sign_up"
+                />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

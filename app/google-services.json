@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "154119848500",
+    "project_id": "journeyjunctionoriginalfinal",
+    "storage_bucket": "journeyjunctionoriginalfinal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154119848500:android:56a3611b1d563cc3804061",
+        "android_client_info": {
+          "package_name": "com.journeyjunction"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuskrcvJSlikvSJ5SJVgVL--CQJTMy0Dk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154119848500:android:5b586e1ddedb7177804061",
+        "android_client_info": {
+          "package_name": "com.journeyjunctionxml"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuskrcvJSlikvSJ5SJVgVL--CQJTMy0Dk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

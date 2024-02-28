@@ -1,0 +1,213 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="10dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical">
+        <ImageButton
+            android:id="@+id/got_home_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/search_icon"
+            android:background="@android:color/transparent"
+            android:contentDescription="got_home_button"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/jj"
+            android:textSize="30sp"
+            android:textAlignment="center"
+            android:fontFamily="@font/kellyslab"
+            android:textColor="#0DCDD9"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <ImageButton
+            android:id="@+id/menu_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/menu_icon"
+            android:contentDescription="Menu"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+    <!-- activity_profile.xml -->
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <ImageView
+                android:id="@+id/imageViewProfile"
+<<<<<<< HEAD
+                android:layout_width="match_parent"
+                android:layout_marginHorizontal="50dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+=======
+                android:layout_width="240dp"
+                android:layout_height="240dp"
+                android:scaleType="centerCrop"
+>>>>>>> 876fb4e30b9db19351dd197b879ff8541648e894
+                android:background="@drawable/profile_image_background"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_marginVertical="15dp"
+                android:textColor="#0DCDD9"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginVertical="2dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="#ffffff"
+                android:layout_height="55dp">
+                <Button
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:text="Timeline"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:background="@drawable/button"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:id="@+id/profile_timeline"
+                    />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <Button
+                android:layout_width="90dp"
+                android:layout_height="48dp"
+                android:text="Photos"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:background="@drawable/button"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:id="@+id/profile_photos_button"
+                />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <Button
+                android:layout_width="90dp"
+                android:layout_height="48dp"
+                android:text="About"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:background="@drawable/button"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:id="@+id/profile_about_button"
+                />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email: john.doe@example.com"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phone: +1234567890"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address: 123 Main St, City, Country"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewNationality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nationality: Country"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewInterests"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Interests: Hiking, Sightseeing, Photography"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewPreferredDestinations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Preferred Destinations: Europe, Asia"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewTourTypes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tour Types Preferred: Adventure, Cultural"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewBudgetPreferences"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Budget Preferences: Moderate"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewExperienceLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Experience Level: Intermediate"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:id="@+id/logout"
+                android:layout_marginBottom="10dp"
+                android:text="Logout"/>
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

@@ -1,0 +1,5 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/search"
+        android:width="25dp"
+        android:height="25dp"/>
+</layer-list>

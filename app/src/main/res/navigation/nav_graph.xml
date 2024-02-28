@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/get_started">
+
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.journeyjunctionxml.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/create_account"
+        android:name="com.journeyjunctionxml.create_account"
+        android:label="fragment_create_account"
+        tools:layout="@layout/fragment_create_account" >
+        <action
+            android:id="@+id/action_create_account_to_home2"
+            app:destination="@id/home2" />
+        <action
+            android:id="@+id/action_create_account_to_sign_in"
+            app:destination="@id/sign_in" />
+        <action
+            android:id="@+id/action_create_account_to_forgot_password"
+            app:destination="@id/forgot_password" />
+        <action
+            android:id="@+id/action_create_account_to_home22"
+            app:destination="@id/home2" />
+    </fragment>
+    <fragment
+        android:id="@+id/forgot_password"
+        android:name="com.journeyjunctionxml.forgot_password"
+        android:label="forgot_password"
+        tools:layout="@layout/forgot_password" >
+        <action
+            android:id="@+id/action_forgot_password_to_home2"
+            app:destination="@id/home2" />
+    </fragment>
+    <fragment
+        android:id="@+id/login_preview"
+        android:name="com.journeyjunctionxml.login_preview"
+        android:label="login_preview"
+        tools:layout="@layout/login_preview" >
+        <action
+            android:id="@+id/action_login_preview_to_create_account"
+            app:destination="@id/create_account" />
+        <action
+            android:id="@+id/action_login_preview_to_sign_in"
+            app:destination="@id/sign_in" />
+        <action
+            android:id="@+id/action_login_preview_to_home2"
+            app:destination="@id/home2" />
+    </fragment>
+    <fragment
+        android:id="@+id/sign_in"
+        android:name="com.journeyjunctionxml.sign_in"
+        android:label="sign_in"
+        tools:layout="@layout/sign_in" >
+        <action
+            android:id="@+id/action_sign_in_to_forgot_password"
+            app:destination="@id/forgot_password" />
+        <action
+            android:id="@+id/action_sign_in_to_create_account"
+            app:destination="@id/create_account" />
+        <action
+            android:id="@+id/action_sign_in_to_home2"
+            app:destination="@id/home2" />
+    </fragment>
+    <fragment
+        android:id="@+id/get_started"
+        android:name="com.journeyjunctionxml.get_started"
+        android:label="get_started"
+        tools:layout="@layout/get_started" >
+        <action
+            android:id="@+id/action_get_started_to_login_preview"
+            app:destination="@id/login_preview" />
+        <action
+            android:id="@+id/action_get_started_to_sign_in"
+            app:destination="@id/sign_in" />
+        <action
+            android:id="@+id/action_get_started_to_home2"
+            app:destination="@id/home2" />
+        <action
+            android:id="@+id/action_get_started_to_create_account"
+            app:destination="@id/create_account" />
+    </fragment>
+    <fragment
+        android:id="@+id/home2"
+        android:name="com.journeyjunctionxml.home"
+        android:label="home"
+        tools:layout="@layout/home" >
+        <action
+            android:id="@+id/action_home2_to_profile"
+            app:destination="@id/profile" />
+    </fragment>
+    <fragment
+<<<<<<< HEAD
+=======
+        android:id="@+id/gaja"
+        android:name="com.journeyjunctionxml.gaja"
+        android:label="gaja"
+        tools:layout="@layout/gaja" />
+    <fragment
+>>>>>>> 876fb4e30b9db19351dd197b879ff8541648e894
+        android:id="@+id/profile"
+        android:name="com.journeyjunctionxml.profile"
+        android:label="profile"
+        tools:layout="@layout/profile" >
+        <action
+            android:id="@+id/action_profile_to_sign_in"
+            app:destination="@id/sign_in" />
+    </fragment>
+</navigation>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">JourneyJunctionXml</string>
+    <string name="motto">Discover, Connect, Explore:\nYour Adventure Awaits.</string>
+    <string name="button_get_started">Get Started</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="jj">JourneyJunction</string>
+    <string name="embark1">Embark on the Journey</string>
+    <string name="embark2">Register now!</string>
+    <string name="button_google"><img src="@drawable/google" /> Sign up with Google</string>
+    <string name="create_account_term">By signing up, you agree to the <font color="#1D9BF9">Terms of Service</font> and <font color="#1D9BF9">Privacy Policy</font>, including <font color="#1D9BF9">Cookie Use.</font></string>
+</resources>
