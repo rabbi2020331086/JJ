@@ -107,8 +107,6 @@
         android:layout_height="1dp"
         android:layout_marginTop="3dp"
         android:background="#0DCDD9"/>
-<<<<<<< HEAD
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_marginBottom="10dp"
@@ -116,12 +114,3 @@
         android:layout_height="match_parent"/>
 
 </LinearLayout>
-=======
-    <!-- activity_main.xml -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-</LinearLayout>
->>>>>>> 876fb4e30b9db19351dd197b879ff8541648e894

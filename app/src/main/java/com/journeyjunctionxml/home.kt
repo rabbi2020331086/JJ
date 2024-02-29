@@ -1,53 +1,44 @@
 package com.journeyjunctionxml
-
-<<<<<<< HEAD
+import android.app.Activity
 import android.app.Dialog
-=======
->>>>>>> 876fb4e30b9db19351dd197b879ff8541648e894
+import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-<<<<<<< HEAD
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.appcompat.widget.AppCompatImageButton
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
-import android.content.Context
 
 class home : Fragment() {
-//Recycler View
+    val GALLERY_REQUEST_CODE = 1
+    //Recycler View
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: HomeItemAdapter
+    private var x: Uri? = null
+
+    private lateinit var popupimage: ImageView
 //Sideb
 
     private var isSidebarVisible = false
-=======
-import androidx.appcompat.widget.AppCompatImageButton
-import androidx.navigation.fragment.findNavController
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
-
-class home : Fragment() {
->>>>>>> 876fb4e30b9db19351dd197b879ff8541648e894
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val auth = Firebase.auth
-
         val view =  inflater.inflate(R.layout.home, container, false)
-        val profilebuttonclick = view.findViewById<AppCompatImageButton>(R.id.menu_button)
-<<<<<<< HEAD
-        val profileButton = view.findViewById<ImageButton>(R.id.profile_button)
+        val profilebuttonclick = view.findViewById<AppCompatImageButton>(R.id.profile_button)
+        val profileButton = view.findViewById<ImageButton>(R.id.menu_button)
         profileButton.setOnClickListener {
             val popupMenu = PopupMenu(requireContext(), profileButton)
             popupMenu.inflate(R.menu.menuoption) // Replace with the name of your menu XML file
@@ -75,8 +66,6 @@ class home : Fragment() {
         adapter = HomeItemAdapter(getSampleItemList())
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-=======
->>>>>>> 876fb4e30b9db19351dd197b879ff8541648e894
         profilebuttonclick.setOnClickListener {
             findNavController().navigate(R.id.action_home2_to_profile)
         }
@@ -84,7 +73,6 @@ class home : Fragment() {
 
     }
 
-<<<<<<< HEAD
     private fun getSampleItemList(): List<PostModel> {
         val itemList = mutableListOf<PostModel>()
 
@@ -114,10 +102,10 @@ class home : Fragment() {
 
         itemList.add(
             PostModel(
-                profilePic = R.drawable.get_started_pic, // Replace with actual drawable ID
+                profilePic = R.drawable.get_started_pic,
                 profileName = "Alex Johnson",
                 contentCaption = "Fresh coffee in the morning.",
-                contentImage = R.drawable.get_started_pic, // Replace with actual drawable ID
+                contentImage = R.drawable.get_started_pic,
                 reactCount = 345,
                 commentCount = 67,
                 shareCount = 89
@@ -126,16 +114,50 @@ class home : Fragment() {
 
         return itemList
     }
+    private fun createPost(context: Context) {
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.create_post_popup, null)
+        val dialog = Dialog(context)
+        dialog.setContentView(dialogView)
+        popupimage = dialogView.findViewById<ImageView>(R.id.create_post_image);
+        popupimage.setOnClickListener {
+            openGallery()
+        }
+        val discard = dialogView.findViewById<Button>(R.id.create_post_discard_button)
+        val done = dialogView.findViewById<Button>(R.id.create_post_done_button)
+        discard.setOnClickListener {
+            x = null
+            dialog.dismiss()
+        }
+        done.setOnClickListener {
+            val editTextCaption = dialogView.findViewById<EditText>(R.id.create_post_caption_edit_text)
+            val caption = editTextCaption.text.toString()
+            if (x != null) {
+                Firebase.uploadImageToFirestore(x!!, requireContext(),"photos", 0,caption)
+                dialog.dismiss()
+            }
+            Log.d(TAG,caption)
+        }
+        dialog.show()
+    }
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val selectedImageUri: Uri? = data?.data
+            selectedImageUri?.let { uri ->
+                popupimage.setImageURI(uri)
+                x = uri
+            }
+        }
+    }
+
+
 
 }
 
-private fun createPost(context: Context) {
-    val inflater = LayoutInflater.from(context)
-    val dialogView = inflater.inflate(R.layout.create_post_popup, null)
-    val dialog = Dialog(context)
-    dialog.setContentView(dialogView)
-    dialog.show()
-}
-=======
-}
->>>>>>> 876fb4e30b9db19351dd197b879ff8541648e894
+

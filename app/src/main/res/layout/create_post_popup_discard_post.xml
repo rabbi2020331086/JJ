@@ -1,0 +1,62 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    android:gravity="center">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:background="@drawable/rounded_background">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="Are you sure to discard your post?"
+            android:textSize="25sp"
+            android:textColor="#ff0000"
+            android:textStyle="bold">
+
+        </TextView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:paddingHorizontal="30dp"
+            android:paddingBottom="10dp"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:id="@+id/create_post_discard_popup_yes"
+                android:background="@drawable/button_blank"
+                android:text="Yes"
+                android:textColor="#ff0000"
+                android:textSize="20sp">
+
+            </Button>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:id="@+id/create_post_discard_popup_no"
+                android:background="@drawable/button"
+                android:text="No"
+                android:textColor="#ffffff"
+                android:textSize="20sp">
+
+            </Button>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</FrameLayout>

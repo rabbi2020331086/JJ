@@ -1,8 +1,10 @@
 package com.journeyjunctionxml
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.ContentValues
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -56,46 +58,72 @@ class profile : Fragment() {
             if (currentUser == null) {
                 findNavController().navigate(R.id.action_profile_to_sign_in)
             } else {
-                ProfilePicturePopUp()
+                ProfilePicturePopUp(requireContext())
             }
         }
         LoadProfile()
         return view
     }
-
-    private fun ProfilePicturePopUp() {
+    private fun ProfilePicturePopUp(context: Context) {
         val inflater = LayoutInflater.from(context)
-        val parent: ViewGroup? = null
-        val popupView = inflater.inflate(R.layout.profile_picture_popup_layout, parent, false)
+        val popupView = inflater.inflate(R.layout.profile_picture_popup_layout, null)
+        val dialog = Dialog(context)
+        dialog.setContentView(popupView)
+        dialog.show()
+
+        // Find views within the popupView
         popupimage = popupView.findViewById<ImageView>(R.id.profile_pic_layout_images)
 
         popupimage.setOnClickListener {
             openGallery()
         }
 
-        val popupWindow = PopupWindow(
-            popupView,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        popupWindow.isFocusable = true
-        popupWindow.isOutsideTouchable = true
-        popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        popupWindow.showAsDropDown(profileImage)
-
         val closeButton = popupView.findViewById<View>(R.id.profile_pic_popup_button)
         closeButton.setOnClickListener {
-            if(x != null) {
-                Firebase.uploadImageToFirestore(x!!,requireContext())
-                popupWindow.dismiss()
+            if (x != null) {
+                Firebase.uploadImageToFirestore(x!!, requireContext(),"profile_pictures",0,"-1")
                 LoadProfile()
-            }
-            else{
-                Toast.makeText(context,"Please select a valid images",Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                dialog.dismiss()
+            } else {
+                Toast.makeText(context, "Please select a valid image", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+
+//    private fun ProfilePicturePopUp() {
+//        val inflater = LayoutInflater.from(context)
+//        val parent: ViewGroup? = null
+//        val popupView = inflater.inflate(R.layout.profile_picture_popup_layout, parent, false)
+//        popupimage = popupView.findViewById<ImageView>(R.id.profile_pic_layout_images)
+//
+//        popupimage.setOnClickListener {
+//            openGallery()
+//        }
+//
+//        val popupWindow = PopupWindow(
+//            popupView,
+//            ViewGroup.LayoutParams.WRAP_CONTENT,
+//            ViewGroup.LayoutParams.WRAP_CONTENT
+//        )
+//        popupWindow.isFocusable = true
+//        popupWindow.isOutsideTouchable = true
+//        popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        popupWindow.showAsDropDown(profileImage)
+//
+//        val closeButton = popupView.findViewById<View>(R.id.profile_pic_popup_button)
+//        closeButton.setOnClickListener {
+//            if(x != null) {
+//                Firebase.uploadImageToFirestore(x!!,requireContext())
+//                popupWindow.dismiss()
+//                LoadProfile()
+//            }
+//            else{
+//                Toast.makeText(context,"Please select a valid images",Toast.LENGTH_SHORT).show()
+//                return@setOnClickListener
+//            }
+//        }
+//    }
     private fun LoadProfile(){
         val cur = Firebase.getCurrentUser();
         if(cur!=null) {
@@ -107,7 +135,7 @@ class profile : Fragment() {
                     Log.d(ContentValues.TAG, "Profile Image URL: $data")
                     GlobalScope.launch(Dispatchers.Main) {
                         try {
-                            val profile_image = data?.get("profile_picture") as? String
+                            val profile_image = data?.get("profile_pictures") as? String
                             val name = data?.get("name") as? String
                             var bitmap: Bitmap? = null  // Declare bitmap here and initialize it to null
 

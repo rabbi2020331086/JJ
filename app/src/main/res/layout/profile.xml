@@ -54,17 +54,11 @@
             android:padding="16dp">
             <ImageView
                 android:id="@+id/imageViewProfile"
-<<<<<<< HEAD
                 android:layout_width="match_parent"
                 android:layout_marginHorizontal="50dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-=======
-                android:layout_width="240dp"
-                android:layout_height="240dp"
-                android:scaleType="centerCrop"
->>>>>>> 876fb4e30b9db19351dd197b879ff8541648e894
                 android:background="@drawable/profile_image_background"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"/>
