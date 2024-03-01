@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +39,7 @@ class home : Fragment() {
         val view =  inflater.inflate(R.layout.home, container, false)
         val profilebuttonclick = view.findViewById<AppCompatImageButton>(R.id.profile_button)
         val profileButton = view.findViewById<ImageButton>(R.id.menu_button)
+        val searh_button = view.findViewById<ImageButton>(R.id.searchButton)
         profileButton.setOnClickListener {
             val popupMenu = PopupMenu(requireContext(), profileButton)
             popupMenu.inflate(R.menu.menuoption) // Replace with the name of your menu XML file
@@ -58,7 +60,10 @@ class home : Fragment() {
                     else -> false
                 }
             }
-            popupMenu.show() // Show the popup menu
+            popupMenu.show()
+        }
+        searh_button.setOnClickListener {
+            searchPopup(requireContext())
         }
 
         recyclerView = view.findViewById(R.id.recyclerView)
@@ -77,9 +82,9 @@ class home : Fragment() {
         itemList.add(
             PostModel(
                 profilePic = R.drawable.get_started_pic,
-                profileName = "John Doe",
-                contentCaption = "Exploring the great outdoors!",
-                contentImage = R.drawable.get_started_pic,
+                profileName = "Rashadul Islam",
+                contentCaption = "Chasing Adventures Down Under: SUST Sylhet Crew Conquering the Australian Hills ",
+                contentImage = R.drawable.imagepost1,
                 reactCount = 123,
                 commentCount = 45,
                 shareCount = 67
@@ -88,9 +93,9 @@ class home : Fragment() {
         itemList.add(
             PostModel(
                 profilePic = R.drawable.get_started_pic, // Replace with actual drawable ID
-                profileName = "Jane Smith",
-                contentCaption = "Nothing beats a sunset at the beach.",
-                contentImage = R.drawable.get_started_pic, // Replace with actual drawable ID
+                profileName = "Touamoni Ab Aysha",
+                contentCaption = "Lost in the Tranquility of Cox's Bazar: Where Time Meets the Sea!!",
+                contentImage = R.drawable.images2, // Replace with actual drawable ID
                 reactCount = 234,
                 commentCount = 56,
                 shareCount = 78
@@ -99,9 +104,9 @@ class home : Fragment() {
         itemList.add(
             PostModel(
                 profilePic = R.drawable.get_started_pic,
-                profileName = "Alex Johnson",
-                contentCaption = "Fresh coffee in the morning.",
-                contentImage = R.drawable.get_started_pic,
+                profileName = "Akkas Ali",
+                contentCaption = "Immersed in Jaflong: Where Nature's Canvas Comes Alive",
+                contentImage = R.drawable.image3,
                 reactCount = 345,
                 commentCount = 67,
                 shareCount = 89
@@ -136,6 +141,17 @@ class home : Fragment() {
         }
         dialog.show()
     }
+    private fun searchPopup(context: Context) {
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.search_popup, null)
+        val dialog = Dialog(context)
+        dialog.setContentView(dialogView)
+        val editText = dialogView.findViewById<EditText>(R.id.search_edit_text)
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setCancelable(true)
+        dialog.show()
+    }
+
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)

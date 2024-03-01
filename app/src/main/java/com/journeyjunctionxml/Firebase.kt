@@ -22,8 +22,9 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 
 class Firebase {
-
     companion object {
+
+        var xx = 1
         var imageurl = "-1"
         private val auth: FirebaseAuth = FirebaseAuth.getInstance()
         @SuppressLint("StaticFieldLeak")
@@ -251,6 +252,7 @@ class Firebase {
                                 SetOptions.merge()
                             )
                             .addOnSuccessListener {
+                                xx = 2
                                 Log.d(TAG,"Image URL stored in Firestore for user: ${currentUser.uid}")
                             }
                             .addOnFailureListener { e ->

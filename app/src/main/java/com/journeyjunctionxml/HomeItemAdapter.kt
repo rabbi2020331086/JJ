@@ -19,6 +19,7 @@ class HomeItemAdapter(private val items: List<PostModel>) : RecyclerView.Adapter
         holder.contentCaption.text = currentItem.contentCaption
         holder.profilePic.setImageResource(currentItem.profilePic)
         holder.contentImage.setImageResource(currentItem.contentImage)
+
     }
 
     override fun getItemCount(): Int {

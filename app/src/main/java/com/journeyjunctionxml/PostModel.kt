@@ -7,4 +7,5 @@ data class PostModel(
     val reactCount: Int = 0,
     val commentCount: Int = 0,
     val shareCount: Int = 0
+
 )

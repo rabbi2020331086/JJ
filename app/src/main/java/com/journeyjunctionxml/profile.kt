@@ -89,8 +89,6 @@ class profile : Fragment() {
             }
         }
     }
-
-
 //    private fun ProfilePicturePopUp() {
 //        val inflater = LayoutInflater.from(context)
 //        val parent: ViewGroup? = null
