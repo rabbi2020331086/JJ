@@ -20,7 +20,6 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 class home : Fragment() {
     val GALLERY_REQUEST_CODE = 1
     //Recycler View
@@ -49,7 +48,7 @@ class home : Fragment() {
                         true
                     }
                     R.id.menu_item2 -> {
-                        // Handle menu item 2 click
+                        addFriebd("GJkgTVMhI2NhYOsS9Av69F29wIs1", requireContext())
                         true
                     }
                     R.id.menu_item3 -> {
@@ -75,19 +74,17 @@ class home : Fragment() {
 
     private fun getSampleItemList(): List<PostModel> {
         val itemList = mutableListOf<PostModel>()
-
         itemList.add(
             PostModel(
-                profilePic = R.drawable.get_started_pic, // Replace with actual drawable ID
+                profilePic = R.drawable.get_started_pic,
                 profileName = "John Doe",
                 contentCaption = "Exploring the great outdoors!",
-                contentImage = R.drawable.get_started_pic, // Replace with actual drawable ID
+                contentImage = R.drawable.get_started_pic,
                 reactCount = 123,
                 commentCount = 45,
                 shareCount = 67
             )
         )
-
         itemList.add(
             PostModel(
                 profilePic = R.drawable.get_started_pic, // Replace with actual drawable ID
@@ -99,7 +96,6 @@ class home : Fragment() {
                 shareCount = 78
             )
         )
-
         itemList.add(
             PostModel(
                 profilePic = R.drawable.get_started_pic,
@@ -140,6 +136,7 @@ class home : Fragment() {
         }
         dialog.show()
     }
+
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
@@ -154,6 +151,9 @@ class home : Fragment() {
                 x = uri
             }
         }
+    }
+    fun addFriebd(uid: String, context: Context){
+        Firebase.addFriend(uid,context);
     }
 
 

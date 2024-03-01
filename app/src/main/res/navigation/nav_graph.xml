@@ -102,5 +102,8 @@
         <action
             android:id="@+id/action_profile_to_sign_in"
             app:destination="@id/sign_in" />
+        <action
+            android:id="@+id/action_profile_self"
+            app:destination="@id/profile" />
     </fragment>
 </navigation>

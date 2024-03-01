@@ -1,8 +1,10 @@
 package com.journeyjunctionxml
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -13,6 +15,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 class Firebase {
@@ -90,6 +96,84 @@ class Firebase {
                     }
                 }
         }
+        fun addFriend(uid: String, context: Context) {
+            val currentUser = getCurrentUser()
+            if (currentUser != null) {
+                var fname = "-1"
+                var fprofile_pic = "-1"
+                var myname = "-1"
+                var myprofile_pic = "-1"
+
+                // Counter to track completion of asynchronous operations
+                var completedOperations = 0
+
+                // Function to check if all data is retrieved successfully and proceed
+                fun trySendingFriendRequest() {
+                    if (fname == "-1" || fprofile_pic == "-1" || myname == "-1" || myprofile_pic == "-1") {
+                        Log.d(TAG, "Cannot proceed with friend request.")
+                        return
+                    }
+
+                    // Proceed with sending friend request as all data is valid
+                    val fData = hashMapOf(
+                        "uid" to uid,
+                        "name" to fname,
+                        "profile_pic_icon" to fprofile_pic
+                    )
+                    val myData = hashMapOf(
+                        "uid" to currentUser.uid.toString(),
+                        "name" to myname,
+                        "profile_pic_icon" to myprofile_pic
+                    )
+                    db.collection("users")
+                        .document(currentUser.uid)
+                        .collection("friend_requests")
+                        .document(uid) // Use the friend's UID as the document ID
+                        .set(fData)
+                        .addOnSuccessListener { documentReference ->
+                            Log.d(TAG, "Friend request sent successfully")
+                            Toast.makeText(context, "Request sent", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Friend request send failed", e)
+                            Toast.makeText(context, "Friend request send failed", Toast.LENGTH_SHORT).show()
+                        }
+                    db.collection("users")
+                        .document(uid)
+                        .collection("pending_requests")
+                        .document(currentUser.uid)
+                        .set(myData)
+                        .addOnSuccessListener { documentReference ->
+                            Log.d(TAG, "Friend request recieved successfully")
+                        }
+                }
+
+                fun myinfo() {
+                    get_docs_info("users", currentUser.uid) { data ->
+                        if (data != null) {
+                            myname = (data["name"] as? String).toString()
+                            myprofile_pic = (data["profile_pictures"] as? String).toString()
+                            trySendingFriendRequest()
+                        }
+                        else{
+                            Toast.makeText(context, "Friend request send failed", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                // Fetch friend's info
+                get_docs_info("users", uid) { data ->
+                    if (data != null) {
+                        fname = (data["name"] as? String).toString()
+                        fprofile_pic = (data["profile_pictures"] as? String).toString()
+                        myinfo()
+                    }
+                    else{
+                        Toast.makeText(context, "Friend request send failed", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
         fun uploadImageToFirestore(imageUri: Uri, context: Context,purpose: String,privacy: Int,caption: String) {
             val progressDialog = ProgressDialog(context)
             progressDialog.setTitle("Uploading")
@@ -124,7 +208,6 @@ class Firebase {
                 }
             }
         }
-
         fun logout(){
             auth.signOut()
         }
@@ -143,7 +226,6 @@ class Firebase {
                 )
                 val currentUser = getCurrentUser()
                 if (currentUser != null) {
-                    Log.d(TAG,"Heda: " + collection)
                     db.collection(collection)
                         .document(currentUser.uid)
                         .set(
@@ -211,15 +293,16 @@ class Firebase {
                 val postData = hashMapOf(
                     "imageUrl" to imageUrl,
                     "caption" to caption,
-                    "uid" to user.uid,
                     "privacy" to privacy,
                     "react" to 0
                 )
-                db.collection("posts")
+                db.collection("users")
                     .document(user.uid)
-                    .set(postData, SetOptions.merge())
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Post URL stored in Firestore for user: ${user.uid}")
+                    .collection("posts")
+                    .add(postData)
+                    .addOnSuccessListener { documentReference ->
+                        val postId = documentReference.id
+                        Log.d(TAG, "Post with ID: $postId added successfully for user: ${user.uid}")
                         Toast.makeText(context, "Post added successfully", Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener { e ->
@@ -228,6 +311,8 @@ class Firebase {
                     }
             }
         }
+
+        
 
     }
 }

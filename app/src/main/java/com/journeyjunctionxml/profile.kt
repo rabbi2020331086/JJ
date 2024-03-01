@@ -82,8 +82,8 @@ class profile : Fragment() {
         closeButton.setOnClickListener {
             if (x != null) {
                 Firebase.uploadImageToFirestore(x!!, requireContext(),"profile_pictures",0,"-1")
-                LoadProfile()
                 dialog.dismiss()
+                findNavController().navigate(R.id.action_profile_self)
             } else {
                 Toast.makeText(context, "Please select a valid image", Toast.LENGTH_SHORT).show()
             }
@@ -137,7 +137,7 @@ class profile : Fragment() {
                         try {
                             val profile_image = data?.get("profile_pictures") as? String
                             val name = data?.get("name") as? String
-                            var bitmap: Bitmap? = null  // Declare bitmap here and initialize it to null
+                            var bitmap: Bitmap? = null
 
                             if (profile_image != null) {
                                 bitmap = withContext(Dispatchers.IO) {
