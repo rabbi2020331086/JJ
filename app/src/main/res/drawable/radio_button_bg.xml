@@ -1,0 +1,22 @@
+<!-- radio_button_background.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Unchecked state -->
+    <item android:state_checked="false">
+        <layer-list>
+            <!-- Empty circle -->
+            <item>
+                <shape android:shape="oval">
+                    <solid android:color="@android:color/transparent"/>
+                    <stroke
+                        android:width="2dp"
+                        android:color="#000000"/> <!-- Border color for empty circle -->
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <!-- Checked state -->
+    <item android:state_checked="true">
+        <!-- This state can be empty if you want a different appearance when checked -->
+    </item>
+</selector>

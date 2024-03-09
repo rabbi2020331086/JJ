@@ -6,6 +6,12 @@
     <string name="jj">JourneyJunction</string>
     <string name="embark1">Embark on the Journey</string>
     <string name="embark2">Register now!</string>
+    <string name="search_prompt">Select search type</string>
+    <string-array name="options">
+        <item>From</item>
+        <item>To</item>
+    </string-array>
     <string name="button_google"><img src="@drawable/google" /> Sign up with Google</string>
+    <string name="red_dot"><font color="#ff0000">*</font></string>
     <string name="create_account_term">By signing up, you agree to the <font color="#1D9BF9">Terms of Service</font> and <font color="#1D9BF9">Privacy Policy</font>, including <font color="#1D9BF9">Cookie Use.</font></string>
 </resources>

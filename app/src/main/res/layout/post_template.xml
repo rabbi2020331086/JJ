@@ -20,11 +20,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/round_background" />
-            <ImageView
-                android:id="@+id/post_item_profile_pic"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                android:gravity="center"
+                android:id="@+id/post_item_profile_icon"
+                android:text="A"
+                android:textSize="35sp"
+                android:textColor="#70CCD9"
+                android:textStyle="bold">
+            </TextView>
         </FrameLayout>
 
         <TextView
@@ -75,9 +80,7 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:background="@drawable/caption_background"
-            android:gravity="start"
-            android:maxLines="3"
-            android:ellipsize="end"/>
+            android:gravity="start"/>
 
     </LinearLayout>
     <ImageView

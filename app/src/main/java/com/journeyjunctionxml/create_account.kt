@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
@@ -28,6 +30,20 @@ class create_account : Fragment() {
             val email = emailTextInputEditText.text.toString()
             val name = nameedit.text.toString()
             val retypepass = retypepassedit.text.toString()
+            val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroup)
+            val adventurerRadioButton = view.findViewById<RadioButton>(R.id.radio_adventurer)
+            var type = if (adventurerRadioButton.isChecked) {
+                "adventurer"
+            } else {
+                "explorer"
+            }
+            radioGroup.setOnCheckedChangeListener { _, checkedId ->
+                type = if (checkedId == R.id.radio_adventurer) {
+                    "adventurer"
+                } else {
+                    "explorer"
+                }
+            }
             if(email.isEmpty() || password.isEmpty() || name.isEmpty() || retypepass.isEmpty()) {
                 Toast.makeText(requireContext(), "All field must be filled!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -40,7 +56,7 @@ class create_account : Fragment() {
                 Toast.makeText(requireContext(), "Password must contain at least 6 characters", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            Firebase.createAccount(email,password,name,
+            Firebase.createAccount(email,password,name,type,
                 onSuccess = {
                     findNavController().navigate(R.id.action_create_account_to_home2)
                 },

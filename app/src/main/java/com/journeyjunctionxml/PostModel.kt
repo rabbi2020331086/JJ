@@ -1,11 +1,12 @@
 package com.journeyjunctionxml
+import android.net.Uri
+
 data class PostModel(
-    val profilePic: Int,
+    val profilePic: String,
     val profileName: String,
     val contentCaption: String,
-    val contentImage: Int,
+    val contentImage: Uri,
     val reactCount: Int = 0,
     val commentCount: Int = 0,
     val shareCount: Int = 0
-
 )

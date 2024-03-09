@@ -44,15 +44,12 @@ class profile : Fragment() {
         savedInstanceState: Bundle?
 
     ): View? {
+        if(Firebase.getCurrentUser() == null){
+            findNavController().navigate(R.id.action_profile_to_sign_in)
+        }
         val view = inflater.inflate(R.layout.profile, container, false)
         profileImage = view.findViewById<ImageView>(R.id.imageViewProfile)
         profilename = view.findViewById(R.id.profile_name)
-        val logout = view.findViewById<Button>(R.id.logout)
-        logout.setOnClickListener {
-            Firebase.logout()
-            findNavController().navigate(R.id.action_profile_to_sign_in)
-        }
-
         profileImage.setOnClickListener {
             val currentUser = Firebase.getCurrentUser()
             if (currentUser == null) {

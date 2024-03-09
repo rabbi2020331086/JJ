@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_sign_in_to_home2"
             app:destination="@id/home2" />
+        <action
+            android:id="@+id/action_sign_in_to_switch_user_mode"
+            app:destination="@id/switch_user_mode" />
     </fragment>
     <fragment
         android:id="@+id/get_started"
@@ -93,6 +96,24 @@
         <action
             android:id="@+id/action_home2_to_profile"
             app:destination="@id/profile" />
+        <action
+            android:id="@+id/action_home2_to_login_preview"
+            app:destination="@id/login_preview" />
+        <action
+            android:id="@+id/action_home2_to_my_photos"
+            app:destination="@id/my_photos" />
+        <action
+            android:id="@+id/action_home2_to_journey_launch"
+            app:destination="@id/journey_launch" />
+        <action
+            android:id="@+id/action_home2_to_search_page"
+            app:destination="@id/search_page" />
+        <action
+            android:id="@+id/action_home2_to_my_trips"
+            app:destination="@id/my_trips" />
+        <action
+            android:id="@+id/action_home2_to_create_journey"
+            app:destination="@id/create_journey" />
     </fragment>
     <fragment
         android:id="@+id/profile"
@@ -105,5 +126,80 @@
         <action
             android:id="@+id/action_profile_self"
             app:destination="@id/profile" />
+        <action
+            android:id="@+id/action_profile_to_my_photos"
+            app:destination="@id/my_photos" />
+    </fragment>
+    <fragment
+        android:id="@+id/my_photos"
+        android:name="com.journeyjunctionxml.my_photos"
+        android:label="my_photos"
+        tools:layout="@layout/my_photos" />
+    <fragment
+        android:id="@+id/switch_user_mode"
+        android:name="com.journeyjunctionxml.switch_user_mode"
+        android:label="switch_user_mode"
+        tools:layout="@layout/switch_user_mode" >
+        <action
+            android:id="@+id/action_switch_user_mode_to_home2"
+            app:destination="@id/home2" />
+    </fragment>
+    <fragment
+        android:id="@+id/journey_launch"
+        android:name="com.journeyjunctionxml.journey_launch"
+        android:label="journey_launch"
+        tools:layout="@layout/journey_launch" />
+    <fragment
+        android:id="@+id/my_friends"
+        android:name="com.journeyjunctionxml.my_friends"
+        android:label="my_friends"
+        tools:layout="@layout/my_friends" />
+    <fragment
+        android:id="@+id/search_page"
+        android:name="com.journeyjunctionxml.search_page"
+        android:label="search_page"
+        tools:layout="@layout/search_page" >
+        <action
+            android:id="@+id/action_search_page_to_profile"
+            app:destination="@id/profile" />
+        <action
+            android:id="@+id/action_search_page_to_search_journey"
+            app:destination="@id/search_journey" />
+    </fragment>
+    <fragment
+        android:id="@+id/my_trips"
+        android:name="com.journeyjunctionxml.my_trips"
+        android:label="my_trips"
+        tools:layout="@layout/my_trips" >
+        <action
+            android:id="@+id/action_my_trips_to_my_past_trip"
+            app:destination="@id/my_past_trip" />
+    </fragment>
+    <fragment
+        android:id="@+id/create_journey"
+        android:name="com.journeyjunctionxml.create_journey"
+        android:label="create_journey"
+        tools:layout="@layout/create_journey" >
+        <action
+            android:id="@+id/action_create_journey_to_home2"
+            app:destination="@id/home2" />
+    </fragment>
+    <fragment
+        android:id="@+id/search_journey"
+        android:name="com.journeyjunctionxml.search_journey"
+        android:label="search_journey"
+        tools:layout="@layout/search_journey" >
+        <action
+            android:id="@+id/action_search_journey_to_search_page"
+            app:destination="@id/search_page" />
+    </fragment>
+    <fragment
+        android:id="@+id/my_past_trip"
+        android:name="com.journeyjunctionxml.my_past_trip"
+        android:label="my_past_trip"
+        tools:layout="@layout/my_past_trip" >
+        <action
+            android:id="@+id/action_my_past_trip_to_my_trips"
+            app:destination="@id/my_trips" />
     </fragment>
 </navigation>

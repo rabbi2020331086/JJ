@@ -1,18 +1,180 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
     android:layout_height="match_parent"
-    android:id="@+id/sidebarlayout"
-    android:orientation="vertical"
-    android:gravity="end"
-    android:layout_gravity="end">
-<Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/sidebar1"
-    android:text="Sidebar Option 1"/>
-<Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/sidebar2"
-    android:text="Sidebar Option 2"/>
-    </LinearLayout>
+    android:layout_gravity="end"
+    android:paddingTop="5dp"
+    android:background="@drawable/sidebar_bg">
+
+    <!-- Top Fixed Bar -->
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:background="#70CCD9"
+        android:layout_height="56dp">
+
+        <!-- Profile Icon -->
+        <ImageView
+            android:id="@+id/sidebar_profileIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/profile_icon"
+            android:contentDescription="profileIcon" />
+
+        <!-- Profile Name -->
+        <TextView
+            android:id="@+id/sidebar_profile_name"
+            android:layout_width="184dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/sidebar_profileIcon"
+            android:layout_marginStart="8dp"
+            android:text="Rashadul Islam"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+
+
+        <!-- Close Button -->
+        <ImageButton
+            android:id="@+id/sidebar_close_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/back_right_icon"
+            android:contentDescription="Close sidebar button" />
+    </RelativeLayout>
+
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="3dp"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/sidebar_profile_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/sidebar_button"
+                android:layout_marginVertical="1dp"
+                android:text="My Profile"
+                android:textColor="#000000"
+                android:textAllCaps="false"
+                android:textSize="18sp"/>
+            <Button
+                android:id="@+id/sidebar_photos_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/sidebar_button"
+                android:layout_marginVertical="1dp"
+                android:text="My Photos"
+                android:textColor="#000000"
+                android:textAllCaps="false"
+                android:textSize="18sp"/>
+            <Button
+                android:id="@+id/sidebar_create_post"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/sidebar_button"
+                android:layout_marginVertical="1dp"
+                android:textColor="#000000"
+                android:text="Create Post"
+                android:textAllCaps="false"
+                android:textSize="18sp"/>
+            <Button
+                android:id="@+id/sidebar_create_trip"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/sidebar_button"
+                android:layout_marginVertical="1dp"
+                android:text="Launch a Journey"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+            <Button
+                android:id="@+id/sidebar_mytrips"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/sidebar_button"
+                android:layout_marginVertical="1dp"
+                android:text="My Trips"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+            <Button
+                android:id="@+id/sidebar_keep_notes"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/sidebar_button"
+                android:layout_marginVertical="1dp"
+                android:text="Keep Notes"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+            <Button
+                android:id="@+id/sidebar_mytools"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/sidebar_button"
+                android:layout_marginVertical="1dp"
+                android:text="My Tools"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+            <Button
+                android:id="@+id/sidebar_discover"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/sidebar_button"
+                android:layout_marginVertical="1dp"
+                android:text="TourSpot Explorer"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+            <Button
+                android:id="@+id/sidebar_settings_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/sidebar_button"
+                android:layout_marginVertical="1dp"
+                android:text="Settings"
+                android:textColor="#000000"
+                android:textAllCaps="false"
+                android:textSize="18sp"/>
+            <Button
+                android:id="@+id/sidebar_help_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/sidebar_button"
+                android:layout_marginVertical="1dp"
+                android:text="Help &amp; Support"
+                android:textColor="#000000"
+                android:textAllCaps="false"
+                android:textSize="18sp"/>
+
+
+            <Button
+                android:id="@+id/sidebar_logout_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/sidebar_button"
+                android:layout_marginVertical="1dp"
+                android:text="Logout"
+                android:textColor="#ff0000"
+                android:textAllCaps="false"
+                android:textSize="18sp"/>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
