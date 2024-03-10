@@ -119,7 +119,6 @@
                 android:id="@+id/search_page_filter"
                 android:textStyle="bold"
                 android:layout_marginTop="5dp">
-
             </Button>
             <View
                 android:layout_width="match_parent"
@@ -127,12 +126,33 @@
                 android:layout_margin="5dp"
                 android:background="#0DCDD9"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="100dp"
+                android:gravity="center_horizontal"
+                android:textSize="20sp"
+                android:textColor="#ff0000"
+                android:visibility="visible"
+                android:id="@+id/result_zero"
+                android:text="No result found!"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="100dp"
+                android:gravity="center_horizontal"
+                android:textSize="18sp"
+                android:textColor="#ff0000"
+                android:id="@+id/no_search"
+                android:text="PLease search something"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/searchPagerecyclerView"
                 android:layout_marginBottom="10dp"
+                android:minHeight="1000dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:listitem="@layout/search_result_feed"/>
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

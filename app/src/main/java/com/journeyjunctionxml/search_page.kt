@@ -13,11 +13,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.w3c.dom.Text
 
 class search_page : Fragment() {
     private lateinit var recyclerView: RecyclerView
@@ -30,12 +32,17 @@ class search_page : Fragment() {
         val search = view.findViewById<ImageButton>(R.id.searching)
         val edittext = view.findViewById<EditText>(R.id.search_edit_text)
         val switch_to_journey_search = view.findViewById<Button>(R.id.search_page_journey)
+        val no_search = view.findViewById<TextView>(R.id.no_search)
+        val result_zero = view.findViewById<TextView>(R.id.result_zero)
         val navController = findNavController()
+        no_search.visibility = View.VISIBLE
+        result_zero.visibility = View.GONE
         edittext.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
                 val searchText = edittext.text.toString()
                 if(searchText.isEmpty()) {
                     Toast.makeText(requireContext(), "Please enter a search query", Toast.LENGTH_SHORT).show()

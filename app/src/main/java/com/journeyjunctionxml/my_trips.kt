@@ -27,7 +27,7 @@ class my_trips : Fragment() {
             findNavController().navigate(R.id.action_my_trips_to_my_past_trip)
         }
         if (currentUser != null) {
-            Firebase.get_upcoming_tour(currentUser.uid, onComplete = {
+            Firebase.get_upcoming_tour(requireContext(), currentUser.uid, onComplete = {
                     list ->
                 if(!list.isEmpty()){
                     upcoming_recyclerView = view.findViewById(R.id.upcoming_trips_recycler_view)

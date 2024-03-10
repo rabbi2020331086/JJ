@@ -25,10 +25,8 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.Arrays
 import java.util.Locale
 import java.util.UUID
-
 class Firebase {
     companion object {
         var idtype = "-1"
@@ -182,6 +180,29 @@ class Firebase {
                     }
             }
         }
+
+        fun checkIfSentFriendExists(uidToCheck: String,onCompleted: (Boolean) -> Unit) {
+            val currentUser = getCurrentUser()
+            if (currentUser != null) {
+                db.collection("users")
+                    .document(currentUser.uid)
+                    .collection("friend_requests")
+                    .document(uidToCheck)
+                    .get()
+                    .addOnSuccessListener { documentSnapshot ->
+                        if (documentSnapshot.exists()) {
+                            onCompleted(true)
+                        } else {
+                            // The friend UID does not exist in the "friends" collection
+                            onCompleted(false)
+                            // You can perform further actions here
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.e(TAG, "Error checking friend existence: ", exception)
+                    }
+            }
+        }
         fun getJourneybySearch(namePrefix: String, type: String, onCompleted: (List<TripsModel>) -> Unit) {
             val lowercasePrefix = namePrefix.toLowerCase(Locale.ROOT)
             Log.d(TAG, "$type search type")
@@ -325,136 +346,134 @@ class Firebase {
                 callback(null)
             }
         }
-
         fun search_tour(){
 
         }
-        fun get_upcoming_tour(uid: String,onComplete: (List<TripsModel>) -> Unit){
-            db.collection("users").document(uid).collection("upcoming_tour")
+        fun get_upcoming_tour(context: Context, uid: String, onComplete: (List<TripsModel>) -> Unit) {
+            val tripsList = mutableListOf<TripsModel>()
+
+            val progressDialog = ProgressDialog(context)
+            progressDialog.setMessage("Loading...")
+            progressDialog.setCancelable(false)
+            progressDialog.show()
+
+            db.collection("users").document(uid).collection("own_journey")
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val tripsList = mutableListOf<TripsModel>()
+                        val documents = task.result ?: return@addOnCompleteListener onComplete(emptyList())
+                        if (documents.isEmpty) onComplete(emptyList()) // Early return if no journeys
 
-                        tripsList.add(
-                            TripsModel(
-                                picture = "dummy_picture_url_1",
-                                title = "Trip 1",
-                                duration = "5 days",
-                                date = "2024-04-15",
-                                places = "City A, City B",
-                                budget = "1000",
-                                check_in = "Hotel X",
-                                gender = "female",
-                                vacancy = "5 (out of 10)",
-                                uid = "user_id_1",
-                                owner = "sjvujsv67stfs",
-                            )
-                        )
+                        var pendingQueries = documents.size() // Set counter for pending queries
+                        for (document in documents) {
+                            val foundString = document.getString("journeyID") ?: ""
+                            db.collection("journeys")
+                                .document(foundString)
+                                .get()
+                                .addOnSuccessListener { document ->
 
-                        tripsList.add(
-                            TripsModel(
-                                picture = "dummy_picture_url_2",
-                                title = "Trip 2",
-                                duration = "3 days",
-                                date = "2024-05-20",
-                                places = "City C, City D",
-                                budget = "200",
-                                check_in = "Hotel Y",
-                                gender = "female",
-                                vacancy = "8 (out of 10)",
-                                uid = "user_id_2",
-                                owner = "rtdbdf457478fggh"
-                            )
-                        )
+                                    Log.d(TAG,document.toString())
 
-                        for (document in task.result ?: emptyList()) {
-                            val trip = TripsModel(
-                                picture = document.getString("picture") ?: "",
-                                title = document.getString("title") ?: "",
-                                duration = document.getString("duration") ?: "",
-                                date = document.getString("date") ?: "",
-                                places = document.getString("places") ?: "",
-                                budget = document.getString("budget") ?: "",
-                                check_in = document.getString("check_in") ?: "",
-                                vacancy = document.getString("vacancy") ?: "",
-                                uid = document.getString("uid") ?: "",
-                                gender = document.getString("gender") ?: "",
-                                owner = document.getString("owner") ?: ""
-                            )
-                            tripsList.add(trip)
+                                    val trip = TripsModel(
+                                        picture = document.getString("picture") ?: "",
+                                        title = document.getString("title") ?: "",
+                                        duration = document.getString("duration") ?: "",
+                                        date = document.getString("date") ?: "",
+                                        places = document.getString("places") ?: "",
+                                        budget = document.getString("budget") ?: "",
+                                        check_in = document.getString("check_in") ?: "",
+                                        vacancy = document.getString("vacancy") ?: "",
+                                        uid = document.getString("uid") ?: "",
+                                        gender = document.getString("gender") ?: "",
+                                        owner = document.getString("owner") ?: ""
+                                    )
+                                    tripsList.add(trip)
+                                    pendingQueries--
+                                    if (pendingQueries <= 0) {
+                                        onComplete(tripsList) // Call onComplete when all queries are done
+                                    }
+                                }
+                                .addOnFailureListener {
+                                    pendingQueries-- // Ensure to decrement on failure too
+                                    if (pendingQueries <= 0) {
+                                        onComplete(tripsList)
+                                    }
+                                }
                         }
-                        onComplete(tripsList)
+                        progressDialog.dismiss()
                     } else {
                         task.exception?.let {
                             Log.w("Error", "Error getting documents: ", it)
+                            onComplete(emptyList())
                         }
-                        onComplete(emptyList())
+                        progressDialog.dismiss()
                     }
                 }
                 .addOnFailureListener {
                     onComplete(emptyList())
                 }
         }
-        fun get_past_tour(uid: String,onComplete: (List<TripsModel>) -> Unit){
-            db.collection("users").document(uid).collection("past_tour")
+
+
+
+
+
+        fun get_past_tour(context: Context,uid: String, onComplete: (List<TripsModel>) -> Unit) {
+            val progressDialog = ProgressDialog(context)
+            progressDialog.setMessage("Loading...")
+            progressDialog.setCancelable(false)
+            progressDialog.show()
+
+            val tripsList = mutableListOf<TripsModel>()
+            db.collection("users").document(uid).collection("past_journey")
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val tripsList = mutableListOf<TripsModel>()
-                        tripsList.add(
-                            TripsModel(
-                                picture = "dummy_picture_url_1",
-                                title = "Trip 1",
-                                duration = "5 days",
-                                date = "2024-04-15",
-                                places = "City A, City B",
-                                budget = "1000",
-                                check_in = "Hotel X",
-                                gender = "male and female",
-                                owner = "sjvujsv67stfs",
-                                vacancy = "5 (out of 10)",
-                                uid = "user_id_1"
-                            )
-                        )
+                        val documents = task.result ?: return@addOnCompleteListener onComplete(emptyList())
+                        if (documents.isEmpty) onComplete(emptyList()) // Early return if no journeys
 
-                        tripsList.add(
-                            TripsModel(
-                                picture = "dummy_picture_url_2",
-                                title = "Trip 2",
-                                duration = "3 days",
-                                date = "2024-05-20",
-                                gender = "male",
-                                owner = "sjvujsv67stfs",
-                                places = "City C, City D",
-                                budget = "800",
-                                check_in = "Hotel Y",
-                                vacancy = "8 (out of 10)",
-                                uid = "user_id_2"
-                            )
-                        )
-                        for (document in task.result ?: emptyList()) {
-                            val trip = TripsModel(
-                                picture = document.getString("picture") ?: "",
-                                title = document.getString("title") ?: "",
-                                duration = document.getString("duration") ?: "",
-                                date = document.getString("date") ?: "",
-                                places = document.getString("places") ?: "",
-                                budget = document.getString("budget") ?: "",
-                                check_in = document.getString("check_in") ?: "",
-                                vacancy = document.getString("vacancy") ?: "",
-                                uid = document.getString("uid") ?: "",
-                                owner = document.getString("owner") ?: "",
-                                gender = document.getString("gender") ?: ""
-                            )
-                            tripsList.add(trip)
+                        var pendingQueries = documents.size() // Set counter for pending queries
+                        for (document in documents) {
+                            val foundString = document.getString("journeyID") ?: ""
+                            db.collection("journeys")
+                                .document(foundString)
+                                .get()
+                                .addOnSuccessListener { document ->
+
+                                    Log.d(TAG,document.toString())
+
+                                    val trip = TripsModel(
+                                        picture = document.getString("picture") ?: "",
+                                        title = document.getString("title") ?: "",
+                                        duration = document.getString("duration") ?: "",
+                                        date = document.getString("date") ?: "",
+                                        places = document.getString("places") ?: "",
+                                        budget = document.getString("budget") ?: "",
+                                        check_in = document.getString("check_in") ?: "",
+                                        vacancy = document.getString("vacancy") ?: "",
+                                        uid = document.getString("uid") ?: "",
+                                        gender = document.getString("gender") ?: "",
+                                        owner = document.getString("owner") ?: ""
+                                    )
+                                    tripsList.add(trip)
+                                    pendingQueries--
+                                    if (pendingQueries <= 0) {
+                                        onComplete(tripsList) // Call onComplete when all queries are done
+                                    }
+                                }
+                                .addOnFailureListener {
+                                    pendingQueries-- // Ensure to decrement on failure too
+                                    if (pendingQueries <= 0) {
+                                        onComplete(tripsList)
+                                    }
+                                }
                         }
-                        onComplete(tripsList)
+                        progressDialog.dismiss()
                     } else {
                         task.exception?.let {
                             Log.w("Error", "Error getting documents: ", it)
+                            onComplete(emptyList())
                         }
-                        onComplete(emptyList())
                     }
                 }
                 .addOnFailureListener {
@@ -539,14 +558,13 @@ class Firebase {
                     }
                 }
         }
-        fun addFriend(uid: String, context: Context) {
+        fun addFriend(uid: String, context: Context,callback: (Boolean) -> Unit) {
             val currentUser = getCurrentUser()
             if (currentUser != null) {
                 var fname = "-1"
                 var fprofile_pic = "-1"
                 var myname = "-1"
                 var myprofile_pic = "-1"
-                var completedOperations = 0
                 fun trySendingFriendRequest() {
                     if (fname == "-1" || fprofile_pic == "-1" || myname == "-1" || myprofile_pic == "-1") {
                         Log.d(TAG, "Cannot proceed with friend request.")
@@ -569,20 +587,26 @@ class Firebase {
                         .set(fData)
                         .addOnSuccessListener { documentReference ->
                             Log.d(TAG, "Friend request sent successfully")
-                            Toast.makeText(context, "Request sent", Toast.LENGTH_SHORT).show()
+                            db.collection("users")
+                                .document(uid)
+                                .collection("pending_requests")
+                                .document(currentUser.uid)
+                                .set(myData)
+                                .addOnSuccessListener { documentReference ->
+                                    callback(true)
+                                    Log.d(TAG, "Friend request recieved successfully")
+                                    Toast.makeText(context, "Request sent", Toast.LENGTH_SHORT).show()
+                                }
+                                .addOnFailureListener{e ->
+                                    callback(false)
+                                }
                         }
                         .addOnFailureListener { e ->
+                            callback(false)
                             Log.w(TAG, "Friend request send failed", e)
                             Toast.makeText(context, "Friend request send failed", Toast.LENGTH_SHORT).show()
                         }
-                    db.collection("users")
-                        .document(uid)
-                        .collection("pending_requests")
-                        .document(currentUser.uid)
-                        .set(myData)
-                        .addOnSuccessListener { documentReference ->
-                            Log.d(TAG, "Friend request recieved successfully")
-                        }
+
                 }
 
                 fun myinfo() {

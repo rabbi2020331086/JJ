@@ -114,12 +114,21 @@
         <action
             android:id="@+id/action_home2_to_create_journey"
             app:destination="@id/create_journey" />
+        <action
+            android:id="@+id/action_home2_to_privacy_page"
+            app:destination="@id/privacy_page" />
+        <action
+            android:id="@+id/action_home2_to_journey_page"
+            app:destination="@id/journey_page" />
     </fragment>
     <fragment
         android:id="@+id/profile"
         android:name="com.journeyjunctionxml.profile"
         android:label="profile"
         tools:layout="@layout/profile" >
+        <argument
+            android:name="myStringArgument"
+            app:argType="string" />
         <action
             android:id="@+id/action_profile_to_sign_in"
             app:destination="@id/sign_in" />
@@ -134,7 +143,11 @@
         android:id="@+id/my_photos"
         android:name="com.journeyjunctionxml.my_photos"
         android:label="my_photos"
-        tools:layout="@layout/my_photos" />
+        tools:layout="@layout/my_photos" >
+        <action
+            android:id="@+id/action_my_photos_to_privacy_page"
+            app:destination="@id/privacy_page" />
+    </fragment>
     <fragment
         android:id="@+id/switch_user_mode"
         android:name="com.journeyjunctionxml.switch_user_mode"
@@ -202,4 +215,14 @@
             android:id="@+id/action_my_past_trip_to_my_trips"
             app:destination="@id/my_trips" />
     </fragment>
+    <fragment
+        android:id="@+id/privacy_page"
+        android:name="com.journeyjunctionxml.privacy_page"
+        android:label="privacy_page"
+        tools:layout="@layout/privacy_page" />
+    <fragment
+        android:id="@+id/journey_page"
+        android:name="com.journeyjunctionxml.journey_page"
+        android:label="journey_page"
+        tools:layout="@layout/journey_page" />
 </navigation>

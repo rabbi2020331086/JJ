@@ -27,11 +27,10 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.journeyjunctionxml.Firebase.Companion.friends
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
-
+import com.journeyjunctionxml.DataClass
 class home : Fragment() {
     val GALLERY_REQUEST_CODE = 1
     //Recycler View
@@ -44,6 +43,7 @@ class home : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val currentUid = Firebase.getCurrentUser()?.uid ?: "null"
         val view =  inflater.inflate(R.layout.home, container, false)
         val notification_button = view.findViewById<ImageButton>(R.id.notification_button)
         val profilebuttonclick = view.findViewById<AppCompatImageButton>(R.id.profile_button)
@@ -110,6 +110,7 @@ class home : Fragment() {
             findNavController().navigate(R.id.action_home2_to_search_page)
         }
         profilebuttonclick.setOnClickListener {
+            DataClass.profileUID = currentUid
             findNavController().navigate(R.id.action_home2_to_profile)
         }
         recyclerView = view.findViewById(R.id.recyclerView)
@@ -231,9 +232,6 @@ class home : Fragment() {
                 x = uri
             }
         }
-    }
-    fun addFriebd(uid: String, context: Context){
-        Firebase.addFriend(uid,context);
     }
     fun downloadBitmap(imageUrl: String): Bitmap {
         val urlConnection = URL(imageUrl).openConnection() as HttpURLConnection

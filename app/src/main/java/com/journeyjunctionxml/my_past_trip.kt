@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,7 @@ class my_past_trip : Fragment() {
             findNavController().navigate(R.id.action_my_past_trip_to_my_trips)
         }
         if (currentUser != null) {
-            Firebase.get_past_tour(currentUser.uid, onComplete = {
+            Firebase.get_past_tour(requireContext(),currentUser.uid, onComplete = {
                     list ->
                 if(!list.isEmpty()){
                     past_recyclerView = view.findViewById(R.id.past_trips_recycler_view)

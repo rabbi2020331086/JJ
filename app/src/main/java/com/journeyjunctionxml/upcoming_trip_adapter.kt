@@ -31,7 +31,6 @@ class upcoming_trip_adapter(private val context: Context, private val navControl
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.trips_layout, parent, false)
         return UpcomingTripViewHolder(itemView)
     }
-
     override fun onBindViewHolder(holder: UpcomingTripViewHolder, position: Int) {
         val currentTrip = userList[position]
         holder.title.text = currentTrip.title

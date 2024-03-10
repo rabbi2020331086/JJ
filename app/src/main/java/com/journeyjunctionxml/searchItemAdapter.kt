@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import android.content.Context
+import android.widget.Toast
 import androidx.core.view.isInvisible
 import androidx.navigation.NavController
 class searchItemAdapter(private val context: Context, private val navController: NavController, private val userList: List<search_users_model>) :
@@ -20,6 +21,7 @@ class searchItemAdapter(private val context: Context, private val navController:
         return searchViewHolder(itemView)
     }
     override fun onBindViewHolder(holder: searchViewHolder, position: Int) {
+        var boolean = 0
         val currentUser = userList[position]
         holder.name.text = currentUser.name
         holder.icon.text = currentUser.name.firstOrNull().toString()
@@ -33,13 +35,40 @@ class searchItemAdapter(private val context: Context, private val navController:
                     holder.addfriend.setImageResource(R.drawable.add_friend_done_icon)
                 }
                 else{
-                    holder.addfriend.isInvisible = false
-                    holder.addfriend.setImageResource(R.drawable.add_friend_icon)
+                    Firebase.checkIfSentFriendExists(currentUser.uid, onCompleted = {
+                        if(true){
+                            holder.addfriend.isInvisible = false
+                            holder.addfriend.setImageResource(R.drawable.add_friend_done_icon)
+                        }
+                        else{
+                            boolean = 1
+                            holder.addfriend.isInvisible = false
+                            holder.addfriend.setImageResource(R.drawable.add_friend_icon)
+                        }
+                    })
+
                 }
             })
         }
         holder.name.setOnClickListener {
+            DataClass.profileUID = currentUser.uid
             navController.navigate(R.id.action_search_page_to_profile)
+        }
+        holder.addfriend.setOnClickListener {
+            if(boolean == 1){
+                Firebase.addFriend(currentUser.uid,context, callback = {
+                    done->
+                        if(done){
+                            boolean = 0
+                            holder.addfriend.isInvisible = false
+                            holder.addfriend.setImageResource(R.drawable.add_friend_done_icon)
+                        }
+                })
+            }
+            else{
+                Toast.makeText(context, "Already friend or request sent!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
         }
     }
     override fun getItemCount(): Int {

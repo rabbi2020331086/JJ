@@ -44,7 +44,6 @@
             android:visibility="invisible"
             android:background="@android:color/transparent"/>
     </LinearLayout>
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

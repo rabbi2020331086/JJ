@@ -1,5 +1,5 @@
 package com.journeyjunctionxml
-
+import com.journeyjunctionxml.DataClass
 import android.app.Activity
 import android.app.Dialog
 import android.content.ContentValues
@@ -22,6 +22,7 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,26 +37,34 @@ class profile : Fragment() {
     private lateinit var popupimage: ImageView
     private lateinit var profilename: TextView
     private var x: Uri? = null
-
     val GALLERY_REQUEST_CODE = 1
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-
     ): View? {
+        childFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        val uid = Firebase.getCurrentUser()?.uid.toString()
         if(Firebase.getCurrentUser() == null){
             findNavController().navigate(R.id.action_profile_to_sign_in)
         }
         val view = inflater.inflate(R.layout.profile, container, false)
+        val profile_edit_button = view.findViewById<TextView>(R.id.profile_edit_button)
+        if(uid != DataClass.profileUID){
+            profile_edit_button.visibility = View.GONE
+        }
         profileImage = view.findViewById<ImageView>(R.id.imageViewProfile)
         profilename = view.findViewById(R.id.profile_name)
         profileImage.setOnClickListener {
-            val currentUser = Firebase.getCurrentUser()
-            if (currentUser == null) {
-                findNavController().navigate(R.id.action_profile_to_sign_in)
-            } else {
-                ProfilePicturePopUp(requireContext())
+            if(uid == DataClass.profileUID){
+                val currentUser = Firebase.getCurrentUser()
+                if (currentUser == null) {
+                    findNavController().navigate(R.id.action_profile_to_sign_in)
+                } else {
+                    ProfilePicturePopUp(requireContext())
+                }
+            }
+            else{
+                return@setOnClickListener
             }
         }
         LoadProfile()
@@ -67,8 +76,6 @@ class profile : Fragment() {
         val dialog = Dialog(context)
         dialog.setContentView(popupView)
         dialog.show()
-
-        // Find views within the popupView
         popupimage = popupView.findViewById<ImageView>(R.id.profile_pic_layout_images)
 
         popupimage.setOnClickListener {
@@ -124,7 +131,7 @@ class profile : Fragment() {
         if(cur!=null) {
             Firebase.get_docs_info(
                 "users",
-                cur.uid
+                DataClass.profileUID
             ) { data ->
                 if (data != null) {
                     Log.d(ContentValues.TAG, "Profile Image URL: $data")
