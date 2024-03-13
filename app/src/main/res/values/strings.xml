@@ -11,6 +11,7 @@
         <item>From</item>
         <item>To</item>
     </string-array>
+    <string name="dummy_introduction">Welcome to the adventurous journey from Haka to Coxs Bazar! Embark on an unforgettable exploration of breathtaking landscapes, rich cultural heritage, and vibrant experiences as you travel from the lush green hills of Haka to the serene beaches of Coxs Bazar. Whether youre a nature enthusiast, history buff, or simply seeking a rejuvenating escape, this journey promises an exhilarating adventure filled with discovery and wonder.</string>
     <string name="button_google"><img src="@drawable/google" /> Sign up with Google</string>
     <string name="red_dot"><font color="#ff0000">*</font></string>
     <string name="create_account_term">By signing up, you agree to the <font color="#1D9BF9">Terms of Service</font> and <font color="#1D9BF9">Privacy Policy</font>, including <font color="#1D9BF9">Cookie Use.</font></string>

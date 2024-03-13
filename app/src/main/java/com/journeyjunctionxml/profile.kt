@@ -76,7 +76,7 @@ class profile : Fragment() {
         val dialog = Dialog(context)
         dialog.setContentView(popupView)
         dialog.show()
-        popupimage = popupView.findViewById<ImageView>(R.id.profile_pic_layout_images)
+        popupimage = popupView.findViewById(R.id.profile_pic_layout_images)
 
         popupimage.setOnClickListener {
             openGallery()

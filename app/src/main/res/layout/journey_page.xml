@@ -1,7 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
     android:orientation="vertical"
     android:gravity="center">
     <LinearLayout
@@ -42,78 +41,428 @@
         android:layout_height="1dp"
         android:layout_margin="5dp"
         android:background="#0DCDD9"/>
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="@drawable/get_started_pic"
-        android:id="@+id/journey_page_cover_image"
-        android:scaleType="centerCrop"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginHorizontal="50dp"
-        android:text="Manage Journey"
-        android:id="@+id/journey_page_manage_journey"
-        android:textColor="#ffffff"
-        android:background="@drawable/bg_edit_profile"
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginVertical="10dp"
-        android:paddingHorizontal="40dp"
-        android:paddingVertical="3dp"
-        android:gravity="center_horizontal">
-        <ImageButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/photos_icon"
-            android:id="@+id/journey_page_photos"
-            android:contentDescription="image">
-
-        </ImageButton>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-        <ImageButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/group_chat_icon"
-            android:id="@+id/journey_page_group_chat"
-            android:contentDescription="image">
-
-        </ImageButton>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-        <ImageButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/members_icon"
-            android:contentDescription="image"
-            android:id="@+id/journey_page_members">
-        </ImageButton>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-        <ImageButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/unchecked_notification_icon"
-            android:contentDescription="image"
-            android:id="@+id/journey_page_notifications">
-        </ImageButton>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="500dp"
+        android:textSize="20sp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="5dp"
+        android:textColor="#0000FF"
+        android:id="@+id/journey_page_title"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
-    </LinearLayout>
+        android:text="Sajeking">
+    </TextView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@drawable/get_started_pic"
+            android:id="@+id/journey_page_cover_image"
+            android:scaleType="centerCrop"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="5dp"
+            android:text="Manage Journey"
+            android:id="@+id/journey_page_manage_journey"
+            android:visibility="visible"
+            android:textColor="#ffffff"
+            android:background="@drawable/bg_edit_profile">
+        </Button>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/journey_page_buttons_layout"
+            android:layout_marginVertical="10dp"
+            android:paddingHorizontal="40dp"
+            android:paddingVertical="3dp"
+            android:gravity="center_horizontal">
+            <ImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/photos_icon"
+                android:id="@+id/journey_page_photos"
+                android:contentDescription="image">
 
+            </ImageButton>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <ImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/group_chat_icon"
+                android:id="@+id/journey_page_group_chat"
+                android:contentDescription="image">
+            </ImageButton>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <ImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/members_icon"
+                android:contentDescription="image"
+                android:id="@+id/journey_page_members">
+            </ImageButton>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <ImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/unchecked_notification_icon"
+                android:contentDescription="image"
+                android:id="@+id/journey_page_notifications">
+            </ImageButton>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="500dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Check In: "
+                    android:textSize="20sp"
+                    android:textColor="#000000"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/journey_page_event_date"
+                    android:text="24/12/2024 - 10:30"
+                    android:textSize="22sp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#ff0000"
+                    android:textStyle="italic"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="From      : "
+                    android:textSize="20sp"
+                    android:textColor="#000000"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/journey_page_event_from"
+                    android:text="Ambarkhana, Sylhet"
+                    android:textSize="22sp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#ff0000"
+                    android:textStyle="italic"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:id="@+id/journey_page_introduction_layout"
+                android:background="@drawable/rounded_background"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="25sp"
+                    android:text="Introduction"
+                    android:gravity="center_horizontal"
+                    android:textColor="#ffffff"
+                    android:layout_marginBottom="5dp">
+
+                </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/caption_background"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+                    <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="100dp"
+                    android:id="@+id/journey_page_introduction"
+                    android:text="@string/dummy_introduction"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:lineSpacingExtra="4dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:background="@drawable/rounded_background"
+                android:orientation="vertical"
+                android:id="@+id/journey_page_checi_in_layout"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="25dp"
+                    android:text="Check in"
+                    android:gravity="center_horizontal"
+                    android:textColor="#ffffff"
+                    android:layout_marginBottom="5dp">
+
+                </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/caption_background"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="100dp"
+                        android:id="@+id/journey_page_check_in"
+                        android:text="1. Ambarkhana, Sylhet\n2. Shunamganj\n3. Moulovi Bazar\n4. Habiganj\n5. Dhaka"
+
+                        android:textColor="#000000"
+                        android:lineSpacingExtra="4dp"
+                        android:layout_marginStart="10dp"
+                        android:textSize="18sp">
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:background="@drawable/rounded_background"
+                android:orientation="vertical"
+                android:id="@+id/journey_page_destinations_layout"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="25dp"
+                    android:text="Destinations"
+                    android:gravity="center_horizontal"
+                    android:textColor="#ffffff"
+                    android:layout_marginBottom="5dp">
+
+                </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/caption_background"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="100dp"
+                        android:id="@+id/journey_page_destinations"
+                        android:text="1. Ambarkhana, Sylhet\n2. Shunamganj\n3. Moulovi Bazar\n4. Habiganj\n5. Dhaka"
+
+                        android:textColor="#000000"
+                        android:lineSpacingExtra="4dp"
+                        android:layout_marginStart="10dp"
+                        android:textSize="18sp">
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:background="@drawable/rounded_background"
+                android:orientation="vertical"
+                android:id="@+id/journey_page_roadmap_layout"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="25dp"
+                    android:text="Roadmap"
+                    android:gravity="center_horizontal"
+                    android:textColor="#ffffff"
+                    android:layout_marginBottom="5dp">
+
+                </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/caption_background"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="100dp"
+                        android:id="@+id/journey_page_roadmap"
+                        android:text="Day 1: Departure from Haka
+
+Begin your journey from Haka, the picturesque hill station nestled in the Chittagong Hill Tracts region.
+Explore the scenic beauty of Haka and immerse yourself in the local culture and traditions.
+Day 2-3: Trekking in Bandarban
+
+Travel to Bandarban and embark on an exciting trekking adventure amidst the lush green hills and pristine forests.
+Discover hidden waterfalls, remote villages, and stunning viewpoints along the way.
+Day 4-5: Cultural Exploration in Chittagong
+
+Continue your journey to Chittagong, the bustling port city known for its vibrant culture and historical landmarks.
+Visit iconic attractions such as the Shahi Jama-e-Masjid, Foy's Lake, and Ethnological Museum.
+Day 6-7: Beach Retreat in Cox's Bazar
+
+Conclude your journey in Cox's Bazar, the longest natural sea beach in the world.
+Indulge in relaxation and recreation on the pristine sandy shores, enjoy thrilling water sports, and witness mesmerizing sunsets."
+                        android:textColor="#000000"
+                        android:lineSpacingExtra="4dp"
+                        android:textSize="16sp">
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:id="@+id/journey_page_highlights_layout"
+                android:background="@drawable/rounded_background"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="22sp"
+                    android:text="Highlights"
+                    android:gravity="center_horizontal"
+                    android:textColor="#ffffff"
+                    android:layout_marginBottom="5dp">
+
+                </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/caption_background"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="100dp"
+                        android:id="@+id/journey_page_highlights"
+                        android:text="Trek through the verdant hills of Bandarban and discover hidden gems off the beaten path.
+Experience the warmth of local hospitality and immerse yourself in the vibrant culture of indigenous communities.
+Explore ancient temples, archaeological sites, and colonial-era architecture in Chittagong.
+Unwind on the sun-kissed beaches of Cox's Bazar and soak in the tranquility of the Bay of Bengal.
+Sample delicious seafood delicacies and savor the flavors of coastal cuisine at beachfront restaurants.
+"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:lineSpacingExtra="4dp">
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:background="@drawable/rounded_background"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="22sp"
+                    android:text="About Organiser"
+                    android:gravity="center_horizontal"
+                    android:textColor="#ffffff"
+                    android:layout_marginBottom="5dp">
+                </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/caption_background"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="100dp"
+                        android:text="How is your Jourmey Roadmap"
+                        android:id="@+id/journey_page_about_organiser"
+                        android:textColor="#000000"
+                        android:lineSpacingExtra="4dp"
+                        android:textSize="16sp">
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:background="@drawable/rounded_background"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="22sp"
+                    android:text="Emergency"
+                    android:gravity="center_horizontal"
+                    android:textColor="#ffffff"
+                    android:layout_marginBottom="5dp">
+                </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/caption_background"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="100dp"
+                        android:text="Phone: 999\nSylhet metropoliton police."
+                        android:id="@+id/journey_page_emergency"
+                        android:textColor="#000000"
+                        android:lineSpacingExtra="4dp"
+                        android:textSize="16sp">
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

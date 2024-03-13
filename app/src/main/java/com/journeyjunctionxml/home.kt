@@ -113,6 +113,9 @@ class home : Fragment() {
             DataClass.profileUID = currentUid
             findNavController().navigate(R.id.action_home2_to_profile)
         }
+        notification_button.setOnClickListener {
+            findNavController().navigate(R.id.action_home2_to_journey_page)
+        }
         recyclerView = view.findViewById(R.id.recyclerView)
         adapter = HomeItemAdapter(getSampleItemList())
         recyclerView.adapter = adapter

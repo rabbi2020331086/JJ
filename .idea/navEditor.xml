@@ -49,8 +49,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="912" />
-                            <option name="y" value="-638" />
+                            <option name="x" value="757" />
+                            <option name="y" value="-210" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -127,8 +127,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="427" />
-                            <option name="y" value="-1048" />
+                            <option name="x" value="477" />
+                            <option name="y" value="-266" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -138,7 +138,7 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_home2_to_journey_launch">
+                            <entry key="action_home2_to_journey_page">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -178,26 +178,66 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="journey_launch">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="-339" />
-                            <option name="y" value="-572" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="journey_page">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-406" />
-                            <option name="y" value="-1037" />
+                            <option name="x" value="584" />
+                            <option name="y" value="-778" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_journey_page_to_home2">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_journey_page_to_journey_page_members2">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_journey_page_to_journey_page_photos2">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="journey_page_members2">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="603" />
+                            <option name="y" value="-1190" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="journey_page_photos2">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="886" />
+                            <option name="y" value="-823" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_journey_page_photos2_self">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -283,8 +323,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="178" />
-                            <option name="y" value="-559" />
+                            <option name="x" value="101" />
+                            <option name="y" value="-445" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -325,9 +365,18 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-30" />
-                            <option name="y" value="-1195" />
+                            <option name="x" value="22" />
+                            <option name="y" value="-950" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_privacy_page_to_home2">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -368,12 +417,17 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-810" />
-                            <option name="y" value="-923" />
+                            <option name="x" value="309" />
+                            <option name="y" value="-709" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_search_journey_to_journey_page">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_search_journey_to_search_page">
                               <value>
                                 <LayoutPositions />
@@ -389,8 +443,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-499" />
-                            <option name="y" value="-363" />
+                            <option name="x" value="-165" />
+                            <option name="y" value="-589" />
                           </Point>
                         </option>
                         <option name="myPositions">

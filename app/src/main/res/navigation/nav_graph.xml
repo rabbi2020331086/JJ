@@ -103,9 +103,6 @@
             android:id="@+id/action_home2_to_my_photos"
             app:destination="@id/my_photos" />
         <action
-            android:id="@+id/action_home2_to_journey_launch"
-            app:destination="@id/journey_launch" />
-        <action
             android:id="@+id/action_home2_to_search_page"
             app:destination="@id/search_page" />
         <action
@@ -158,11 +155,6 @@
             app:destination="@id/home2" />
     </fragment>
     <fragment
-        android:id="@+id/journey_launch"
-        android:name="com.journeyjunctionxml.journey_launch"
-        android:label="journey_launch"
-        tools:layout="@layout/journey_launch" />
-    <fragment
         android:id="@+id/my_friends"
         android:name="com.journeyjunctionxml.my_friends"
         android:label="my_friends"
@@ -205,6 +197,9 @@
         <action
             android:id="@+id/action_search_journey_to_search_page"
             app:destination="@id/search_page" />
+        <action
+            android:id="@+id/action_search_journey_to_journey_page"
+            app:destination="@id/journey_page" />
     </fragment>
     <fragment
         android:id="@+id/my_past_trip"
@@ -219,10 +214,38 @@
         android:id="@+id/privacy_page"
         android:name="com.journeyjunctionxml.privacy_page"
         android:label="privacy_page"
-        tools:layout="@layout/privacy_page" />
+        tools:layout="@layout/privacy_page" >
+        <action
+            android:id="@+id/action_privacy_page_to_home2"
+            app:destination="@id/home2" />
+    </fragment>
     <fragment
         android:id="@+id/journey_page"
         android:name="com.journeyjunctionxml.journey_page"
         android:label="journey_page"
-        tools:layout="@layout/journey_page" />
+        tools:layout="@layout/journey_page" >
+        <action
+            android:id="@+id/action_journey_page_to_home2"
+            app:destination="@id/home2" />
+        <action
+            android:id="@+id/action_journey_page_to_journey_page_photos2"
+            app:destination="@id/journey_page_photos2" />
+        <action
+            android:id="@+id/action_journey_page_to_journey_page_members2"
+            app:destination="@id/journey_page_members2" />
+    </fragment>
+    <fragment
+        android:id="@+id/journey_page_photos2"
+        android:name="com.journeyjunctionxml.journey_page_photos"
+        android:label="journey_page_photos"
+        tools:layout="@layout/journey_page_photos" >
+        <action
+            android:id="@+id/action_journey_page_photos2_self"
+            app:destination="@id/journey_page_photos2" />
+    </fragment>
+    <fragment
+        android:id="@+id/journey_page_members2"
+        android:name="com.journeyjunctionxml.journey_page_members"
+        android:label="journey_page_members"
+        tools:layout="@layout/journey_page_members" />
 </navigation>

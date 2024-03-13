@@ -11,7 +11,7 @@ data class TripsModel(
     val vacancy: String = "",
     val owner: String = "",
     val gender: String = "",
-    val uid: String = ""
+    var uid: String = ""
 ) {
     // No-argument constructor
     constructor() : this("", "", "", "", "", "", "", "", "", "", "")
