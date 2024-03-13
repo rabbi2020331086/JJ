@@ -61,7 +61,6 @@ class journey_page : Fragment() {
         from = view.findViewById(R.id.journey_page_event_from)
 
 
-
         val photos = view.findViewById<ImageButton>(R.id.journey_page_photos)
         val members = view.findViewById<ImageView>(R.id.journey_page_members)
         photos.setOnClickListener {
@@ -116,60 +115,37 @@ class journey_page : Fragment() {
                 edit_field(requireContext(),"Highlights","highlights");
             }
         }
-        checkin_layout.setOnClickListener {
-            if(isadmin == false)
-                return@setOnClickListener
-            else{
-                edit_field(requireContext(),"Check In","check_in");
-            }
-        }
-        destination_layout.setOnClickListener {
-            if(isadmin == false)
-                return@setOnClickListener
-            else{
-                edit_field(requireContext(),"Destinations","places");
-            }
-        }
         LoadJourney()
         return view
     }
     fun LoadJourney(){
-        Firebase.loadJourney(requireContext(), DataClass.journeyUID) { title1, introduction1, roadmap1, places1, checkIn1, highlights1, eventDate1, from1 ->
-            if (title1 == null) {
-                Toast.makeText(context, "Journey Does not exist!", Toast.LENGTH_SHORT).show()
+        isadmin = true
+        Firebase.loadJourney(requireContext(), DataClass.journeyUID) { map ->
+            if (map == null) {
+                Toast.makeText(context, "Journey does not exist!", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_journey_page_to_home2)
             } else {
-                title.setText(title1)
-                if(introduction1 == null && !isadmin){
+                title.setText(map["title"])
+                places.setText(map["destination"])
+                check_in.setText(map["checkpoints"])
+                if (map["introduction"].isNullOrBlank() && !isadmin) {
                     introduction_layout.visibility = View.GONE
+                } else {
+                    introduction.setText(map["introduction"] ?: "Add introduction to get more explorers")
                 }
-                else if(introduction1 == null){
-                    introduction.setText("Add introduction to get more explorers")
-                }
-                else
-                    introduction.setText(introduction1)
-
-
-                if(roadmap1 == null && !isadmin){
+                if (map["roadmap"].isNullOrBlank() && !isadmin) {
                     roadmap_layout.visibility = View.GONE
+                } else {
+                    roadmap.setText(map["roadmap"] ?: "Add introduction to get more explorers")
                 }
-                else if(roadmap1 == null){
-                    roadmap.setText("Add complete roadmap to get more explorers")
-                }
-                else
-                    roadmap.setText(roadmap1)
-                places.setText(places1)
-                check_in.setText(places1)
-                if(highlights1 == null && !isadmin){
+
+                if (map["highlights"].isNullOrBlank() && !isadmin) {
                     highlights_layout.visibility = View.GONE
+                } else {
+                    highlights.setText(map["highlights"] ?: "Add introduction to get more explorers")
                 }
-                else if(highlights1 == null){
-                    highlights.setText("Add better highlights to get more explorers")
-                }
-                else
-                    highlights.setText(highlights1)
-                event_date.setText(eventDate1)
-                from.setText(from1)
+
+
             }
         }
     }
@@ -182,6 +158,7 @@ class journey_page : Fragment() {
         val title = dialogView.findViewById<TextView>(R.id.journey_page_popup_title)
         val text = dialogView.findViewById<EditText>(R.id.journey_page_popup_edit_text)
         val button = dialogView.findViewById<Button>(R.id.create_post_done_button)
+        val back_button = dialogView.findViewById<ImageButton>(R.id.edit_field_back_button)
         val uid = Firebase.getCurrentUser()?.uid
         if(uid != null) {
             Firebase.getJourneyFields(DataClass.journeyUID,edit_field, onCompleted = {
@@ -195,7 +172,6 @@ class journey_page : Fragment() {
             })
         }
         title.setText(editpopup)
-
         button.setOnClickListener {
             val text = text.text.toString()
             if(text.length < 200 && edit_field == "introduction" || text.length < 200 && edit_field == "highlights"){
@@ -210,6 +186,9 @@ class journey_page : Fragment() {
                 Firebase.updateJourneyField(requireContext(),post_id,edit_field,text);
                 dialog.dismiss()
             }
+        }
+        back_button.setOnClickListener {
+            dialog.dismiss()
         }
 
         dialog.show()

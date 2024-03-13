@@ -26,55 +26,8 @@ class get_started : Fragment() {
         val view =  inflater.inflate(R.layout.get_started, container, false)
         val get_started_button_click = view.findViewById<Button>(R.id.get_started_button)
         val currentUser = Firebase.getCurrentUser()
-        if (currentUser != null) {
-            Firebase.get_docs_info(
-                "users",
-                currentUser.uid
-            ) { data ->
-                if (data != null) {
-                    Firebase.name = (data?.get("name") as? String).toString()
-                    Log.d(TAG,"Name: " + Firebase.name)
-                }
-                else{
-                    Log.d(TAG,"data not found for user")
-                }
-            }
-            Firebase.get_docs_info("users", currentUser.uid) { userInfo ->
-                Firebase.idtype = userInfo?.get("type")?.toString() ?: "explorer"
-            }
-            if (view is ViewGroup) {
-                Firebase.getFriends(requireContext(),
-                    onCompleted = { isSuccess ->
-                        if (isSuccess) {
-                            var x = 0
-                            val sz = Firebase.friends.size
-                            Firebase.friends.forEach { friend ->
-                                val friendUid = friend["uid"].toString()
-                                Firebase.getPost(requireContext(),friendUid, 1, onCompleted = {
-                                    if(isSuccess){
-                                        x++
-                                        if(x == sz){
-//                                            Firebase.sort()
-                                            Firebase.friends.clear()
-                                            //gaja
-                                            findNavController().navigate(R.id.action_get_started_to_home2)
-                                            //gaja
-                                        }
-                                        Log.d(TAG,"Post success")
-                                    }
-                                    else{
-
-                                    }
-                                })
-                            }
-                        } else {
-                            Toast.makeText(context, "Failed to fetch friends", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                )
-            } else {
-                Toast.makeText(requireContext(), "View is not a ViewGroup", Toast.LENGTH_SHORT).show()
-            }
+        if(currentUser!=null){
+            findNavController().navigate(R.id.action_get_started_to_home2)
         }
 
         get_started_button_click.setOnClickListener{

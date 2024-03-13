@@ -1,11 +1,14 @@
 package com.journeyjunctionxml
 
+import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
@@ -15,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 class journey_page_members : Fragment() {
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: journey_page_members_adapter
+    lateinit var recyclerViewInvite: RecyclerView
+    lateinit var adapterInvite: invitememberadapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +40,52 @@ class journey_page_members : Fragment() {
             }
         })
 
+        val invite = view.findViewById<Button>(R.id.journey_page_member_add)
+        invite.setOnClickListener {
+            val inflater = LayoutInflater.from(context)
+            val popupView = inflater.inflate(R.layout.journey_page_member_add_popup, null)
+            val dialog = Dialog(requireContext())
+            val uid = Firebase.getCurrentUser()?.uid.toString()
+            dialog.setContentView(popupView)
+            var count = 0
+            Firebase.inviteFriends(uid, onCompleted = {lists ->
+                val userList = mutableListOf<search_users_model>()
+                lists.forEach { user ->
+                    Firebase.isExistinJourney(user.uid,DataClass.journeyUID, onCompleted = {isTrue ->
+                        if(!isTrue){
+                            userList.add(user)
+                        }
+                        count++
+                        if(count == lists.size){
+                            recyclerViewInvite = popupView.findViewById(R.id.recyclerView)
+                            adapterInvite = invitememberadapter(requireContext(),userList)
+                            recyclerViewInvite.adapter = adapterInvite
+                            recyclerViewInvite.layoutManager = LinearLayoutManager(requireContext())
+                        }
+                    })
+                }
+            })
+            dialog.show()
+        }
         return view
     }
+
+//    private fun invitememberPopup(context: Context) {
+//        val inflater = LayoutInflater.from(context)
+//        val popupView = inflater.inflate(R.layout.journey_page_member_add_popup, null)
+//        val dialog = Dialog(context)
+//        val uid = Firebase.getCurrentUser()?.uid.toString()
+//        dialog.setContentView(popupView)
+//        Firebase.inviteFriends(uid, onCompleted = {lists ->
+//            val userList = mutableListOf<search_users_model>()
+//            lists.forEach { user ->
+//                Firebase.isExistinJourney(user.uid,DataClass.journeyUID, onCompleted = {isTrue ->
+//                    if(!isTrue){
+//                        userList.add(user)
+//                    }
+//                })
+//            }
+//        })
+//        dialog.show()
+//    }
 }

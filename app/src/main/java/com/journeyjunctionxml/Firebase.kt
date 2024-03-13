@@ -15,9 +15,11 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.BufferedInputStream
@@ -27,6 +29,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Locale
 import java.util.UUID
+import kotlin.coroutines.resume
+
 class Firebase {
     companion object {
         var idtype = "-1"
@@ -34,7 +38,6 @@ class Firebase {
         var postList = mutableListOf<Pair<String, Map<String, Any>>>()
         var pending_req: MutableList<Map<String, Any>> = mutableListOf()
         var sent_req: MutableList<Map<String, Any>> = mutableListOf()
-        var friends: MutableList<Map<String, Any>> = mutableListOf()
         var xx = 1
         var imageurl = "-1"
         private val auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -61,74 +64,63 @@ class Firebase {
 //            }
 //        }
 
-        fun loadJourney(context: Context, uid: String, onCompleted: (String?, String?, String?, String?, String?, String?, String?, String?) -> Unit) {
+        fun loadJourney(context: Context, uid: String, onCompleted: (MutableMap<String, String>) -> Unit) {
             db.collection("journeys")
                 .document(uid)
                 .get()
                 .addOnSuccessListener { documentSnapshot ->
-                    // Retrieve values from the document snapshot
-                    val title = documentSnapshot.getString("title")
-                    val introduction = documentSnapshot.getString("introduction")
-                    val roadmap = documentSnapshot.getString("roadmap")
-                    val places = documentSnapshot.getString("destination")
-                    val checkIn = documentSnapshot.getString("check_in")
-                    val highlights = documentSnapshot.getString("highlights")
-                    val eventDate = documentSnapshot.getString("date")
-                    val from = documentSnapshot.getString("checkpoints")
-                    onCompleted(title, introduction, roadmap, places, checkIn, highlights, eventDate, from)
+                    val dataMap = mutableMapOf<String, String>()
+                    dataMap["roadmap"] = documentSnapshot.getString("roadmap") ?: ""
+                    dataMap["date"] = documentSnapshot.getString("date") ?: ""
+                    dataMap["description"] = documentSnapshot.getString("description") ?: ""
+                    dataMap["title"] = documentSnapshot.getString("title") ?: ""
+                    dataMap["introduction"] = documentSnapshot.getString("introduction") ?: ""
+                    dataMap["destination"] = documentSnapshot.getString("places") ?: ""
+                    dataMap["checkpoints"] = documentSnapshot.getString("checkpoints") ?: ""
+                    dataMap["highlights"] = documentSnapshot.getString("highlights") ?: ""
+                    onCompleted(dataMap)
+                }
+        }
+
+        fun getPost(uid: String, prevList: List<PostModel>, onComplete: (List<PostModel>) -> Unit) {
+            val list = prevList.toMutableList() // Convert the previous list to mutable
+            db.collection("users")
+                .document(uid)
+                .collection("posts")
+                .get()
+                .addOnSuccessListener { posts ->
+                    for (document in posts) {
+                        val pp = PostModel(
+                            profilePic = document.getString("imageUrl") ?: "",
+                            profileName = document.getString("name") ?: "",
+                            contentCaption = document.getString("caption") ?: "",
+                            contentImage = document.getString("imageUrl") ?: "",
+                            reactCount = 0,
+                            commentCount = 0,
+                            shareCount = 0
+                        )
+                        list.add(pp)
+                    }
+                    onComplete(list)
                 }
                 .addOnFailureListener { exception ->
-                    onCompleted(null, null, null, null, null, null, null, null) // Pass null to indicate failure for all fields
+                    Log.e(TAG, "Error getting posts for user $uid", exception)
+                    onComplete(list)
                 }
         }
-        fun getPost(context: Context, uid: String, privacy: Int, onCompleted: (Boolean) -> Unit) {
-            val progressDialog = ProgressDialog(context).apply {
-                setMessage("Loading...")
-                isIndeterminate = true
-                setCancelable(false)
-                show()
-            }
-            val currentUser = getCurrentUser()
-            if (currentUser != null) {
-                GlobalScope.launch(Dispatchers.Main) {
-                    try {
-                        val documents = Firebase.firestore
-                            .collection("users")
-                            .document(uid)
-                            .collection("posts")
-                            .get()
-                            .await()
 
-                        documents.forEach { document ->
-                            Log.d(TAG, "bokasoda")
-                            val postPrivacy = document.getDouble("privacy")?.toInt()
-                            if (postPrivacy == privacy) {
-                                val postId = document.id
-                                val postData = document.data.toMutableMap()
-                                postData["postId"] = postId
-                                if (postData["imageUrl"] != null) {
-                                    val uri: Uri? = withContext(Dispatchers.IO) {
-                                        downloadImageUri(postData["imageUrl"].toString())
-                                    }
-                                    postData["imageUrl"] = uri
-                                } else {
-                                    postData["imageUrl"] = null
-                                }
 
-                                postList.add(Pair(postId, postData))
-                                Log.d(TAG, "Post ID: $postId, Data: $postData")
-                            }
-                        }
-                        onCompleted(true)
-                        progressDialog.dismiss()
-                    } catch (exception: Exception) {
-                        Log.w(TAG, "Error getting documents: ", exception)
-                        onCompleted(false)
-                        progressDialog.dismiss()
-                    }
-                }
-            }
-        }
+
+//        val userList = mutableListOf<search_users_model>()
+//        for (document in documents) {
+//            val uid = document.id
+//            val userName = document.getString("name") ?: ""
+//            val user = search_users_model(uid, userName)
+//            userList.add(user)
+//        }
+//        onComplete(userList)
+
+
 
         fun updateJourneyField(context: Context,uid: String, field: String, text: String){
             val userData = hashMapOf(
@@ -184,9 +176,6 @@ class Firebase {
                         Log.w(TAG, "Error getting sent requests: ", exception)
                     }
             }
-        }
-        fun clearFriends() {
-            friends.clear()
         }
         fun checkIfFriendExists(uidToCheck: String,onCompleted: (Boolean) -> Unit) {
             val currentUser = getCurrentUser()
@@ -326,12 +315,12 @@ class Firebase {
                     onComplete(emptyList())
                 }
         }
-        fun getFriends(context: Context, onCompleted: (Boolean) -> Unit) {
-            val progressDialog = ProgressDialog(context)
-            progressDialog.setMessage("Loading...")
-            progressDialog.setCancelable(false)
-            progressDialog.show()
-
+        fun getFriends(context: Context, onCompleted: (List<String>) -> Unit) {
+            Log.d(TAG, "i am in getFriends")
+            val progressDialog = ProgressDialog(context).apply {
+                setMessage("Loading...")
+                show()
+            }
             val currentUser = getCurrentUser()
             if (currentUser != null) {
                 db.collection("users")
@@ -339,28 +328,27 @@ class Firebase {
                     .collection("friends")
                     .get()
                     .addOnSuccessListener { documents ->
-                        progressDialog.dismiss()
-
+                        val uids = mutableListOf<String>()
                         for (document in documents) {
-                            val requestId = document.id
-                            val requestData = document.data
-                            friends.add(requestData)
-                            Log.d(TAG, "Request ID: $requestId, Data: $requestData")
+                            val uid = document.getString("uid")
+                            Log.d(TAG,uid.toString())
+                            uid?.let { uids.add(it) }
                         }
-                        onCompleted(true)
+                        onCompleted(uids)
+                        progressDialog.dismiss()
                     }
                     .addOnFailureListener { exception ->
                         progressDialog.dismiss()
-
                         Log.w(TAG, "Error getting Friends ", exception)
-                        onCompleted(false)
+                        onCompleted(emptyList())
+                        progressDialog.dismiss()
                     }
             } else {
                 progressDialog.dismiss()
-
-                onCompleted(false)
+                onCompleted(emptyList())
             }
         }
+
 
 
         fun add_journeyID_to_users_collection(journeyID: String, onComplete: (Boolean) -> Unit) {
@@ -767,7 +755,7 @@ class Firebase {
                 }
             }
         }
-        fun uploadImageToFirestore(imageUri: Uri, context: Context,purpose: String,privacy: Int,caption: String) {
+        fun uploadImageToFirestore(imageUri: Uri, context: Context,purpose: String,privacy: Int,caption: String,name: String) {
             val progressDialog = ProgressDialog(context)
             progressDialog.setTitle("Uploading")
             progressDialog.setMessage("Please wait...")
@@ -792,7 +780,7 @@ class Firebase {
                 progressDialog.dismiss()
                 if (task.isSuccessful) {
                     val downloadUri = task.result
-                    storeImageUrlInFirestore(context,downloadUri.toString(),purpose,privacy,caption)
+                    storeImageUrlInFirestore(context,downloadUri.toString(),purpose,privacy,caption,name)
                     Log.d(TAG, "Download URL: $downloadUri")
 
                 } else {
@@ -804,7 +792,7 @@ class Firebase {
         fun logout(){
             auth.signOut()
         }
-        fun storeImageUrlInFirestore(context: Context,imageUrl: String,collection: String,privacy: Int,caption: String) {
+        fun storeImageUrlInFirestore(context: Context,imageUrl: String,collection: String,privacy: Int,caption: String,name: String) {
             var numberofProfilePicture = 0
             getDocumentSize(collection) { docSize ->
                 Log.d(TAG,"photos: "+ docSize)
@@ -852,7 +840,7 @@ class Firebase {
                             }
                     }
                     else{
-                        createPost(imageUrl, caption, privacy, context)
+                        createPost(imageUrl, caption, privacy, context,name)
                     }
                 } else {
 
@@ -881,7 +869,41 @@ class Firebase {
                 callback(0)
             }
         }
-
+        fun isExistinJourney(uid: String, juid: String, onCompleted: (Boolean) -> Unit){
+            db.collection("journeys")
+                .document(juid)
+                .collection("members")
+                .document(uid)
+                .get()
+                .addOnSuccessListener { info ->
+                    if(info.exists())
+                        onCompleted(true)
+                    else
+                        onCompleted(false)
+                }
+                .addOnFailureListener {e ->
+                    onCompleted(false)
+                }
+        }
+        fun inviteFriends(uid: String,onCompleted: (List<search_users_model>) -> Unit) {
+            db.collection("users")
+                .document(uid)
+                .collection("friends")
+                .get()
+                .addOnSuccessListener { documents ->
+                    val userList = mutableListOf<search_users_model>()
+                    for (document in documents) {
+                        val uid = document.id
+                        val userName = document.getString("name") ?: ""
+                        val user = search_users_model(uid, userName)
+                        userList.add(user)
+                    }
+                    onCompleted(userList)
+                }
+                .addOnFailureListener {
+                    onCompleted(emptyList())
+                }
+        }
         fun getJourneyPageMembers(journeyID: String,onComplete: (List<search_users_model>) -> Unit){
             db.collection("journeys")
                 .document(journeyID)
@@ -924,11 +946,11 @@ class Firebase {
 
 
 
-        fun createPost(imageUrl: String, caption: String, privacy: Int, context: Context) {
+        fun createPost(imageUrl: String, caption: String, privacy: Int, context: Context,name: String) {
             val currentUser = getCurrentUser()
             currentUser?.let { user ->
                 val postData = hashMapOf(
-                    "name" to this.name,
+                    "name" to name,
                     "owner" to currentUser.uid,
                     "imageUrl" to imageUrl,
                     "caption" to caption,

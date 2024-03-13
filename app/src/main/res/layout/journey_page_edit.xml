@@ -20,17 +20,28 @@
                 android:padding="10dp"
                 android:background="#0DCDD9"
                 android:orientation="vertical">
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Title"
-                    android:textAlignment="center"
-                    android:id="@+id/journey_page_popup_title"
-                    android:layout_marginBottom="5dp"
-                    android:textColor="#ffffff"
-                    android:textSize="25dp"
-                    android:textStyle="bold"/>
+                    android:orientation="horizontal">
+                    <ImageButton
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/back_left_icon"
+                        android:contentDescription="Back"
+                        android:id="@+id/edit_field_back_button">
+                    </ImageButton>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Title"
+                        android:textAlignment="center"
+                        android:id="@+id/journey_page_popup_title"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="#ffffff"
+                        android:textSize="25dp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"

@@ -31,12 +31,19 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import com.journeyjunctionxml.DataClass
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+
 class home : Fragment() {
     val GALLERY_REQUEST_CODE = 1
     //Recycler View
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: HomeItemAdapter
     private var x: Uri? = null
+    lateinit var myuid: String
     private var isSidebarVisible = false
     lateinit var popupimage : ImageView
     override fun onCreateView(
@@ -49,6 +56,23 @@ class home : Fragment() {
         val profilebuttonclick = view.findViewById<AppCompatImageButton>(R.id.profile_button)
         val menubutton = view.findViewById<ImageButton>(R.id.menu_button)
         val searh_button = view.findViewById<ImageButton>(R.id.searchButton)
+        myuid = Firebase.getCurrentUser()?.uid.toString()
+        Firebase.getFriends(requireContext(), onCompleted = {friends ->
+            var list: List<PostModel>
+            list = emptyList()
+            var cnt = 0
+            friends.forEach { uid ->
+                Firebase.getPost(uid,list, onComplete = {newlist ->
+                    list = newlist
+                    cnt++
+                    if(cnt == friends.size){
+                        //success
+                    }
+                })
+            }
+        })
+
+
 
         menubutton.setOnClickListener {
             val popupWindow = PopupWindow(context)
@@ -116,49 +140,11 @@ class home : Fragment() {
         notification_button.setOnClickListener {
             findNavController().navigate(R.id.action_home2_to_journey_page)
         }
-        recyclerView = view.findViewById(R.id.recyclerView)
-        adapter = HomeItemAdapter(getSampleItemList())
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+//        recyclerView = view.findViewById(R.id.recyclerView)
+//        adapter = HomeItemAdapter()
+//        recyclerView.adapter = adapter
+//        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         return view;
-    }
-
-    fun getSampleItemList(): List<Pair<String, PostModel>> {
-        val sampleList = mutableListOf<Pair<String, PostModel>>()
-        val allPostsList = Firebase.postList
-        Log.d(TAG,"Putki")
-        Log.d(TAG,allPostsList.size.toString())
-
-        allPostsList.forEach { (postId, postData) ->
-            var contentCaption = postData["caption"]
-            var contentImage = postData["imageUrl"]
-            val reactCount = 0
-            val commentCount = 0
-            val shareCount = 0
-            if(contentCaption == null){
-                contentCaption = "-1"
-            }
-            val postModel = PostModel(
-                profilePic = "null",
-                profileName = Firebase.name,
-                contentCaption = contentCaption.toString(),
-                contentImage = convertToUri(contentImage) ?: Uri.EMPTY,
-                reactCount = reactCount,
-                commentCount = commentCount,
-                shareCount = shareCount
-            )
-            sampleList.add(postId to postModel)
-        }
-        return sampleList
-    }
-    fun convertToUri(any: Any?): Uri? {
-        return if (any is Uri) {
-            any // If it's already a Uri, return as it is
-        } else if (any is String) {
-            Uri.parse(any) // If it's a String, parse it to Uri
-        } else {
-            null // Return null for other types
-        }
     }
     private fun createPost(context: Context) {
         val inflater = LayoutInflater.from(context)
@@ -200,7 +186,9 @@ class home : Fragment() {
                 } else {
                     xx = 1
                 }
-                Firebase.uploadImageToFirestore(x!!, requireContext(), "photos", xx, caption)
+                Firebase.getuserinfo(myuid,"name", onCompleted = {name ->
+                    Firebase.uploadImageToFirestore(x!!, requireContext(), "photos", xx, caption,name)
+                })
                 dialog.dismiss()
             }
 
@@ -234,16 +222,6 @@ class home : Fragment() {
                 popupimage.setImageURI(uri)
                 x = uri
             }
-        }
-    }
-    fun downloadBitmap(imageUrl: String): Bitmap {
-        val urlConnection = URL(imageUrl).openConnection() as HttpURLConnection
-        try {
-            urlConnection.connect()
-            val inputStream: InputStream = urlConnection.inputStream
-            return BitmapFactory.decodeStream(inputStream)
-        } finally {
-            urlConnection.disconnect()
         }
     }
 }

@@ -85,7 +85,7 @@ class profile : Fragment() {
         val closeButton = popupView.findViewById<View>(R.id.profile_pic_popup_button)
         closeButton.setOnClickListener {
             if (x != null) {
-                Firebase.uploadImageToFirestore(x!!, requireContext(),"profile_pictures",0,"-1")
+                Firebase.uploadImageToFirestore(x!!, requireContext(),"profile_pictures",0,"-1","name")
                 dialog.dismiss()
                 findNavController().navigate(R.id.action_profile_self)
             } else {
