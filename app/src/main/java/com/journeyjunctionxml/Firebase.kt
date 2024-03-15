@@ -30,13 +30,11 @@ import java.net.URL
 import java.util.Locale
 import java.util.UUID
 import kotlin.coroutines.resume
-
 class Firebase {
     companion object {
         var idtype = "-1"
         var name = "-1"
         var postList = mutableListOf<Pair<String, Map<String, Any>>>()
-        var pending_req: MutableList<Map<String, Any>> = mutableListOf()
         var sent_req: MutableList<Map<String, Any>> = mutableListOf()
         var xx = 1
         var imageurl = "-1"
@@ -81,9 +79,29 @@ class Firebase {
                     onCompleted(dataMap)
                 }
         }
+        fun isReacted(uid: String, myid: String, pid: String, onCompleted: (Boolean) -> Unit){
+            db.collection("users")
+                .document(uid)
+                .collection("posts")
+                .document(pid)
+                .collection("reacted")
+                .document(myid)
+                .get()
+                .addOnSuccessListener { ishere ->
+                    if(ishere.exists())
+                        onCompleted(true)
+                    else
+                        onCompleted(false)
+                }
+                .addOnFailureListener { e ->
+                    onCompleted(false)
+                }
+        }
+        fun ReactPost(uid: String, pid: String,onCompleted: (Boolean) -> Unit){
 
-        fun getPost(uid: String, prevList: List<PostModel>, onComplete: (List<PostModel>) -> Unit) {
-            val list = prevList.toMutableList() // Convert the previous list to mutable
+        }
+        fun getPost(uid: String, onComplete: (List<PostModel>) -> Unit) {
+            val list = mutableListOf<PostModel>() // Initialize as mutable list
             db.collection("users")
                 .document(uid)
                 .collection("posts")
@@ -91,37 +109,22 @@ class Firebase {
                 .addOnSuccessListener { posts ->
                     for (document in posts) {
                         val pp = PostModel(
-                            profilePic = document.getString("imageUrl") ?: "",
                             profileName = document.getString("name") ?: "",
                             contentCaption = document.getString("caption") ?: "",
                             contentImage = document.getString("imageUrl") ?: "",
-                            reactCount = 0,
-                            commentCount = 0,
-                            shareCount = 0
+                            reactCount = document.getString("react").toString() ?: "",
+                            uid = document.getString("owner") ?: "",
+                            pid = document.id
                         )
                         list.add(pp)
                     }
-                    onComplete(list)
+                    onComplete(list.toList())
                 }
                 .addOnFailureListener { exception ->
                     Log.e(TAG, "Error getting posts for user $uid", exception)
-                    onComplete(list)
+                    onComplete(emptyList())
                 }
         }
-
-
-
-//        val userList = mutableListOf<search_users_model>()
-//        for (document in documents) {
-//            val uid = document.id
-//            val userName = document.getString("name") ?: ""
-//            val user = search_users_model(uid, userName)
-//            userList.add(user)
-//        }
-//        onComplete(userList)
-
-
-
         fun updateJourneyField(context: Context,uid: String, field: String, text: String){
             val userData = hashMapOf(
                 field to text
@@ -136,44 +139,52 @@ class Firebase {
                     Toast.makeText(context, "Update failed!.", Toast.LENGTH_SHORT).show()
                 }
         }
-
-        fun getPendingreq() {
+        fun getPendingreq(uid: String, onComplete: (List<search_users_model>) -> Unit) {
             val currentUser = getCurrentUser()
             if (currentUser != null) {
                 db.collection("users")
                     .document(currentUser.uid)
-                    .collection("sen")
+                    .collection("pending_requests")
                     .get()
                     .addOnSuccessListener { documents ->
+                        val list = mutableListOf<search_users_model>()
                         for (document in documents) {
-                            val requestId = document.id
-                            val requestData = document.data
-                            pending_req.add(requestData)
-                            Log.d(TAG, "Request ID: $requestId, Data: $requestData")
+                            val uid = document.getString("uid") ?: ""
+                            val name = document.getString("name") ?: ""
+                            if (uid.isNotEmpty() && name.isNotEmpty()) {
+                                list.add(search_users_model(uid, name))
+                            }
                         }
+                        onComplete(list) // Call onComplete with the list
                     }
                     .addOnFailureListener { exception ->
                         Log.w(TAG, "Error getting pending requests: ", exception)
+                        onComplete(emptyList()) // Optionally call onComplete with an empty list in case of failure
                     }
             }
         }
-        fun getSentReq() {
+
+        fun getFriends(type: String,onComplete: (List<search_users_model>) -> Unit) {
             val currentUser = getCurrentUser()
             if (currentUser != null) {
                 db.collection("users")
                     .document(currentUser.uid)
-                    .collection("friend_requests")
+                    .collection(type)
                     .get()
                     .addOnSuccessListener { documents ->
+                        val list = mutableListOf<search_users_model>()
                         for (document in documents) {
-                            val requestId = document.id
-                            val requestData = document.data
-                            sent_req.add(requestData)
-                            Log.d(TAG, "Request ID: $requestId, Data: $requestData")
+                            val uid = document.getString("uid") ?: ""
+                            val name = document.getString("name") ?: ""
+                            if (uid.isNotEmpty() && name.isNotEmpty()) {
+                                list.add(search_users_model(uid, name))
+                            }
                         }
+                        onComplete(list) // Call onComplete with the list
                     }
                     .addOnFailureListener { exception ->
-                        Log.w(TAG, "Error getting sent requests: ", exception)
+                        Log.w(TAG, "Error getting pending requests: ", exception)
+                        onComplete(emptyList()) // Optionally call onComplete with an empty list in case of failure
                     }
             }
         }
@@ -186,7 +197,7 @@ class Firebase {
                     .document(uidToCheck)
                     .get()
                     .addOnSuccessListener { documentSnapshot ->
-                        if (documentSnapshot.exists()) {
+                        if (documentSnapshot.exists() && documentSnapshot != null) {
                             Log.d(TAG, "Friend $uidToCheck exists for user ${currentUser.uid}")
                             onCompleted(true)
                         } else {
@@ -202,6 +213,32 @@ class Firebase {
             }
         }
 
+
+        fun FriendRequest(from: String,to: String,myid: String,uid: String, onCompleted: (Boolean) -> Unit) {
+            val userRef = db.collection("users").document(myid)
+            val requestDocRef = userRef.collection(from).document(uid)
+
+            requestDocRef.get().addOnSuccessListener { documentSnapshot ->
+                if (!documentSnapshot.exists()) {
+                    onCompleted(false)
+                    return@addOnSuccessListener
+                }
+                val friendData = documentSnapshot.data ?: return@addOnSuccessListener onCompleted(false)
+                val friendDocRef = userRef.collection(to).document(uid)
+
+                db.runTransaction { transaction ->
+                    transaction.set(friendDocRef, friendData)
+                    transaction.delete(requestDocRef)
+                    null
+                }.addOnSuccessListener {
+                    onCompleted(true)
+                }.addOnFailureListener { e ->
+                    onCompleted(false)
+                }
+            }.addOnFailureListener { e ->
+                onCompleted(false)
+            }
+        }
         fun checkIfSentFriendExists(uidToCheck: String,onCompleted: (Boolean) -> Unit) {
             val currentUser = getCurrentUser()
             if (currentUser != null) {
@@ -211,11 +248,12 @@ class Firebase {
                     .document(uidToCheck)
                     .get()
                     .addOnSuccessListener { documentSnapshot ->
-                        if (documentSnapshot.exists()) {
+                        if (documentSnapshot.exists() && documentSnapshot != null) {
                             onCompleted(true)
                         } else {
                             // The friend UID does not exist in the "friends" collection
                             onCompleted(false)
+                            Log.e(TAG, "Not exists ")
                             // You can perform further actions here
                         }
                     }
@@ -484,11 +522,6 @@ class Firebase {
                     onComplete(emptyList())
                 }
         }
-
-
-
-
-
         fun get_past_tour(context: Context,uid: String, onComplete: (List<TripsModel>) -> Unit) {
             val progressDialog = ProgressDialog(context)
             progressDialog.setMessage("Loading...")
@@ -567,15 +600,12 @@ class Firebase {
                         }
                     }
                     .addOnFailureListener { exception ->
-                        // Handle failure
                         callback(null)
                     }
             } else {
                 callback(null)
             }
         }
-
-        //Create Account
         fun createAccount(email: String, password: String, name: String,type: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
@@ -618,7 +648,6 @@ class Firebase {
                     }
                 }
         }
-        //Sign In
         fun signInWithEmailPassword(email: String, password: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
@@ -692,7 +721,6 @@ class Firebase {
                         }
                     }
                 }
-                // Fetch friend's info
                 get_docs_info("users", uid) { data ->
                     if (data != null) {
                         fname = (data["name"] as? String).toString()
@@ -939,13 +967,6 @@ class Firebase {
                     onCompleted("")
                 }
         }
-
-
-
-
-
-
-
         fun createPost(imageUrl: String, caption: String, privacy: Int, context: Context,name: String) {
             val currentUser = getCurrentUser()
             currentUser?.let { user ->
@@ -955,7 +976,7 @@ class Firebase {
                     "imageUrl" to imageUrl,
                     "caption" to caption,
                     "privacy" to privacy,
-                    "react" to 0,
+                    "react" to "0",
                     "timestampField" to FieldValue.serverTimestamp()
                 )
                 db.collection("users")
@@ -983,7 +1004,6 @@ class Firebase {
                 urlConnection.disconnect()
             }
         }
-
         suspend fun downloadImageUri(imageUrl: String): Uri? {
             return withContext(Dispatchers.IO) {
                 try {
@@ -1007,8 +1027,5 @@ class Firebase {
                 }
             }
         }
-
-
-
     }
 }

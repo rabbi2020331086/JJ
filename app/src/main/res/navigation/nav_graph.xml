@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/get_started">
+    app:startDestination="@id/home2">
 
     <activity
         android:id="@+id/mainActivity"
@@ -66,9 +66,6 @@
         <action
             android:id="@+id/action_sign_in_to_home2"
             app:destination="@id/home2" />
-        <action
-            android:id="@+id/action_sign_in_to_switch_user_mode"
-            app:destination="@id/switch_user_mode" />
     </fragment>
     <fragment
         android:id="@+id/get_started"
@@ -117,6 +114,9 @@
         <action
             android:id="@+id/action_home2_to_journey_page"
             app:destination="@id/journey_page" />
+        <action
+            android:id="@+id/action_home2_to_friend_management"
+            app:destination="@id/friend_management" />
     </fragment>
     <fragment
         android:id="@+id/profile"
@@ -144,15 +144,6 @@
         <action
             android:id="@+id/action_my_photos_to_privacy_page"
             app:destination="@id/privacy_page" />
-    </fragment>
-    <fragment
-        android:id="@+id/switch_user_mode"
-        android:name="com.journeyjunctionxml.switch_user_mode"
-        android:label="switch_user_mode"
-        tools:layout="@layout/switch_user_mode" >
-        <action
-            android:id="@+id/action_switch_user_mode_to_home2"
-            app:destination="@id/home2" />
     </fragment>
     <fragment
         android:id="@+id/my_friends"
@@ -248,4 +239,43 @@
         android:name="com.journeyjunctionxml.journey_page_members"
         android:label="journey_page_members"
         tools:layout="@layout/journey_page_members" />
+    <fragment
+        android:id="@+id/friend_management"
+        android:name="com.journeyjunctionxml.friend_management"
+        android:label="friend_management"
+        tools:layout="@layout/friend_management" >
+        <action
+            android:id="@+id/action_friend_management_to_pending_friend_request2"
+            app:destination="@id/pending_friend_request2" />
+        <action
+            android:id="@+id/action_friend_management_to_sent_req"
+            app:destination="@id/sent_req" />
+        <action
+            android:id="@+id/action_friend_management_to_sent_req2"
+            app:destination="@id/sent_req" />
+    </fragment>
+    <fragment
+        android:id="@+id/pending_friend_request2"
+        android:name="com.journeyjunctionxml.pending_friend_request"
+        android:label="pending_friend_request"
+        tools:layout="@layout/pending_friend_request" >
+        <action
+            android:id="@+id/action_pending_friend_request2_to_sent_req"
+            app:destination="@id/sent_req" />
+        <action
+            android:id="@+id/action_pending_friend_request2_to_friend_management"
+            app:destination="@id/friend_management" />
+    </fragment>
+    <fragment
+        android:id="@+id/sent_req"
+        android:name="com.journeyjunctionxml.sent_req"
+        android:label="sent_req"
+        tools:layout="@layout/sent_req" >
+        <action
+            android:id="@+id/action_sent_req_to_pending_friend_request2"
+            app:destination="@id/pending_friend_request2" />
+        <action
+            android:id="@+id/action_sent_req_to_friend_management"
+            app:destination="@id/friend_management" />
+    </fragment>
 </navigation>

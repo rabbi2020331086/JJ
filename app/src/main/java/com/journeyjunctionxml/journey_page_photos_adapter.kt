@@ -67,8 +67,6 @@ class journey_page_photos_adapter(private val navController: NavController, priv
                 }
             })
         }
-        var bitmap: Bitmap? = null
-
         if (url != null) {
             GlobalScope.launch(Dispatchers.Main) {
                 val bitmap = withContext(Dispatchers.IO) {

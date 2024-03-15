@@ -125,26 +125,6 @@
                 android:layout_height="2dp"
                 android:layout_margin="5dp"
                 android:background="#0DCDD9"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="100dp"
-                android:gravity="center_horizontal"
-                android:textSize="20sp"
-                android:textColor="#ff0000"
-                android:visibility="visible"
-                android:id="@+id/result_zero"
-                android:text="No result found!"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="100dp"
-                android:gravity="center_horizontal"
-                android:textSize="18sp"
-                android:textColor="#ff0000"
-                android:id="@+id/no_search"
-                android:text="PLease search something"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/searchPagerecyclerView"
                 android:layout_marginBottom="10dp"

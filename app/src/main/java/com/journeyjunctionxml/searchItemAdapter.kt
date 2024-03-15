@@ -31,14 +31,12 @@ class searchItemAdapter(private val context: Context, private val navController:
             Firebase.checkIfFriendExists(currentUser.uid, onCompleted = {
                     isFriend ->
                 if(isFriend){
-                    holder.addfriend.isInvisible = false
-                    holder.addfriend.setImageResource(R.drawable.add_friend_done_icon)
+                    holder.addfriend.isInvisible = true
                 }
                 else{
-                    Firebase.checkIfSentFriendExists(currentUser.uid, onCompleted = {
-                        if(true){
+                    Firebase.checkIfSentFriendExists(currentUser.uid, onCompleted = {isval ->
+                        if(isval){
                             holder.addfriend.isInvisible = false
-                            holder.addfriend.setImageResource(R.drawable.add_friend_done_icon)
                         }
                         else{
                             boolean = 1
@@ -46,7 +44,6 @@ class searchItemAdapter(private val context: Context, private val navController:
                             holder.addfriend.setImageResource(R.drawable.add_friend_icon)
                         }
                     })
-
                 }
             })
         }

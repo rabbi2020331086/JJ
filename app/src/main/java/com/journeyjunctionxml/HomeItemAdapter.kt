@@ -1,66 +1,96 @@
 package com.journeyjunctionxml
-import android.content.ContentValues.TAG
+import android.content.Context
 import android.graphics.Bitmap
-import com.journeyjunctionxml.homeItemViewHolder
 import android.graphics.BitmapFactory
-import android.net.Uri
-import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isInvisible
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
-class HomeItemAdapter(private val items: List<Pair<String, PostModel>>) : RecyclerView.Adapter<homeItemViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): homeItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.post_template, parent, false)
-        return homeItemViewHolder(view)
+class HomeItemAdapter(private val context: Context, private val navController: NavController, private val postList: List<PostModel>) :
+    RecyclerView.Adapter<HomeItemAdapter.ViewHolder>() {
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val icon: TextView = itemView.findViewById(R.id.post_item_profile_icon)
+        val name: TextView = itemView.findViewById(R.id.post_item_profile_name)
+        val caption: TextView = itemView.findViewById(R.id.post_item_content_caption)
+        val addFriend: ImageButton = itemView.findViewById(R.id.post_template_add_friend)
+        val image: ImageView = itemView.findViewById(R.id.post_item_image)
+        val react: Button = itemView.findViewById(R.id.post_item_react_button)
     }
 
-    override fun onBindViewHolder(holder: homeItemViewHolder, position: Int) {
-        val (postId, postModel) = items[position]
-        holder.profileName.text = postModel.profileName
-        val firstCharacter: Char? = postModel.profileName.firstOrNull()
-        holder.profilePic.setText(firstCharacter.toString())
-        val contentImageUri = convertToUri(postModel.contentImage)
-        if (contentImageUri != null) {
-            holder.contentImage.setImageURI(contentImageUri)
-        } else {
-            holder.contentImage.visibility = View.GONE
-        }
-        if(postModel.contentCaption == "-1"){
-            holder.contentCaption.isInvisible = true
-        }
-        else
-            holder.contentCaption.text = postModel.contentCaption
-        holder.react.setText(postModel.reactCount.toString())
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.post_template, parent, false)
+        return ViewHolder(itemView)
     }
-    fun convertToUri(any: Any?): Uri? {
-        return if (any is Uri) {
-            any // If it's already a Uri, return as it is
-        } else if (any is String) {
-            Uri.parse(any) // If it's a String, parse it to Uri
-        } else {
-            null // Return null for other types
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val currentPost = postList[position]
+        holder.name.text = currentPost.profileName
+        holder.addFriend.visibility = View.GONE
+        val myid = Firebase.getCurrentUser()?.uid
+        var isreacted = false
+        Firebase.isReacted(currentPost.uid,myid.toString(),currentPost.pid, onCompleted = {reacted ->
+            if(reacted){
+                isreacted = true
+                holder.react.setText("Loved")
+            }
+            else{
+                isreacted = false
+                holder.react.setText("Love")
+            }
+        })
+        holder.icon.text = currentPost.profileName.firstOrNull().toString()
+        holder.react.setOnClickListener {
+
+            Toast.makeText(context, "React button clicked", Toast.LENGTH_SHORT).show()
         }
+        if (currentPost.contentCaption != null && currentPost.contentCaption != "null" && currentPost.contentCaption != "") {
+            holder.caption.setText(currentPost.contentCaption)
+        }
+        else{
+            holder.caption.visibility = View.GONE
+        }
+
+        if (currentPost.contentImage != null && currentPost.contentImage != "null" && currentPost.contentImage != "") {
+            GlobalScope.launch(Dispatchers.Main) {
+                val bitmap = withContext(Dispatchers.IO) {
+                    downloadBitmap(currentPost.contentImage)
+                }
+                holder.image.setImageBitmap(bitmap)
+            }
+        } else {
+            holder.image.visibility = View.GONE
+        }
+
     }
+
     override fun getItemCount(): Int {
-        return items.size
+        return postList.size
     }
-    fun stringToBitmap(encodedString: String?): Bitmap? {
-        if (encodedString.isNullOrEmpty()) {
-            return null
+    suspend fun downloadBitmap(imageUrl: String): Bitmap {
+        return withContext(Dispatchers.IO) {
+            val urlConnection = URL(imageUrl).openConnection() as HttpURLConnection
+            try {
+                urlConnection.connect()
+                val inputStream: InputStream = urlConnection.inputStream
+                BitmapFactory.decodeStream(inputStream)
+            } finally {
+                urlConnection.disconnect()
+            }
         }
-        val decodedBytes = Base64.decode(encodedString, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
     }
-    fun stringToUri(uriString: String?): Uri? {
-        if (uriString.isNullOrEmpty()) {
-            return null
-        }
-        return Uri.parse(uriString)
-    }
-
 }
-

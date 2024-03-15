@@ -86,6 +86,32 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="friend_management">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1221" />
+                            <option name="y" value="-301" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_friend_management_to_pending_friend_request2">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_friend_management_to_sent_req">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="get_started">
                     <value>
                       <LayoutPositions>
@@ -134,6 +160,11 @@
                         <option name="myPositions">
                           <map>
                             <entry key="action_home2_to_create_journey">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_home2_to_friend_management">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -360,6 +391,27 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="pending_friend_request2">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1432" />
+                            <option name="y" value="-328" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_pending_friend_request2_to_sent_req">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="privacy_page">
                     <value>
                       <LayoutPositions>
@@ -455,6 +507,27 @@
                               </value>
                             </entry>
                             <entry key="action_search_page_to_search_journey">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="sent_req">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1659" />
+                            <option name="y" value="-355" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_sent_req_to_pending_friend_request2">
                               <value>
                                 <LayoutPositions />
                               </value>

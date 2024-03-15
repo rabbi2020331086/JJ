@@ -56,21 +56,25 @@ class home : Fragment() {
         val profilebuttonclick = view.findViewById<AppCompatImageButton>(R.id.profile_button)
         val menubutton = view.findViewById<ImageButton>(R.id.menu_button)
         val searh_button = view.findViewById<ImageButton>(R.id.searchButton)
+
+        val navController = findNavController()
         myuid = Firebase.getCurrentUser()?.uid.toString()
-        Firebase.getFriends(requireContext(), onCompleted = {friends ->
-            var list: List<PostModel>
-            list = emptyList()
+        Firebase.getFriends(requireContext()) { friends ->
+            val list = mutableListOf<PostModel>()
             var cnt = 0
             friends.forEach { uid ->
-                Firebase.getPost(uid,list, onComplete = {newlist ->
-                    list = newlist
+                Firebase.getPost(uid) { newlist ->
+                    list.addAll(newlist)
                     cnt++
-                    if(cnt == friends.size){
-                        //success
+                    if (cnt == friends.size) {
+                        recyclerView = view.findViewById(R.id.recyclerView)
+                        adapter = HomeItemAdapter(requireContext(), navController, list.toList())
+                        recyclerView.adapter = adapter
+                        recyclerView.layoutManager = LinearLayoutManager(requireContext())
                     }
-                })
+                }
             }
-        })
+        }
 
 
 
@@ -82,6 +86,16 @@ class home : Fragment() {
             popupWindow.height = WindowManager.LayoutParams.MATCH_PARENT
             popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             val createPostButton = customView.findViewById<Button>(R.id.sidebar_create_post)
+            val friends_button = customView.findViewById<Button>(R.id.sidebar_friend_management_button)
+
+
+            friends_button.setOnClickListener {
+                findNavController().navigate(R.id.action_home2_to_friend_management)
+                popupWindow.dismiss()
+            }
+
+
+
             createPostButton.setOnClickListener {
                 createPost(requireContext())
                 popupWindow.dismiss()
@@ -153,7 +167,7 @@ class home : Fragment() {
         dialog.setContentView(dialogView)
         val discard = dialogView.findViewById<Button>(R.id.create_post_discard_button)
         val done = dialogView.findViewById<Button>(R.id.create_post_done_button)
-        popupimage = dialogView.findViewById<ImageView>(R.id.create_post_image)
+        popupimage = dialogView.findViewById(R.id.create_post_image)
         val privacybutton = dialogView.findViewById<Button>(R.id.create_post_privacy_button)
         privacybutton.setOnClickListener {
             if(privacybutton.text == "Private"){
@@ -177,8 +191,6 @@ class home : Fragment() {
                 Toast.makeText(context, "Please choose a caption or a photo", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
-            // Proceed with handling the scenario where either caption or photo is present
             if (x != null) {
                 var xx = -1
                 if (privacybutton.text == "Private") {
@@ -191,7 +203,6 @@ class home : Fragment() {
                 })
                 dialog.dismiss()
             }
-
             Log.d(TAG, caption)
         }
 

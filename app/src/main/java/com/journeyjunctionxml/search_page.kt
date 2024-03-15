@@ -1,7 +1,5 @@
 package com.journeyjunctionxml
 
-import android.content.ContentValues
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -32,11 +30,7 @@ class search_page : Fragment() {
         val search = view.findViewById<ImageButton>(R.id.searching)
         val edittext = view.findViewById<EditText>(R.id.search_edit_text)
         val switch_to_journey_search = view.findViewById<Button>(R.id.search_page_journey)
-        val no_search = view.findViewById<TextView>(R.id.no_search)
-        val result_zero = view.findViewById<TextView>(R.id.result_zero)
         val navController = findNavController()
-        no_search.visibility = View.VISIBLE
-        result_zero.visibility = View.GONE
         edittext.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
