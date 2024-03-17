@@ -56,8 +56,11 @@ class home : Fragment() {
         val profilebuttonclick = view.findViewById<AppCompatImageButton>(R.id.profile_button)
         val menubutton = view.findViewById<ImageButton>(R.id.menu_button)
         val searh_button = view.findViewById<ImageButton>(R.id.searchButton)
-
+        val journeys = view.findViewById<ImageButton>(R.id.journeys)
         val navController = findNavController()
+        journeys.setOnClickListener {
+            findNavController().navigate(R.id.action_home2_to_all_journeys)
+        }
         myuid = Firebase.getCurrentUser()?.uid.toString()
         Firebase.getFriends(requireContext()) { friends ->
             val list = mutableListOf<PostModel>()

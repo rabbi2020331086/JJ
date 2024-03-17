@@ -6,12 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import android.content.Context
 import android.util.Log
 import android.widget.Button
-
 import androidx.navigation.NavController
-class search_journey_adapter(private val navController: NavController, private val userList: List<TripsModel>) :
+class search_journey_adapter(private val from: String,private val navController: NavController, private val userList: List<TripsModel>) :
     RecyclerView.Adapter<search_journey_adapter.search_journey_view_holder>() {
     inner class search_journey_view_holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title = itemView.findViewById<TextView>(R.id.trips_title)
@@ -29,7 +27,6 @@ class search_journey_adapter(private val navController: NavController, private v
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.trips_layout,parent,false)
         return search_journey_view_holder(itemView)
     }
-
     override fun onBindViewHolder(holder: search_journey_adapter.search_journey_view_holder, position: Int) {
         val currentUser = userList[position]
         holder.title.text = currentUser.title
@@ -43,7 +40,10 @@ class search_journey_adapter(private val navController: NavController, private v
         holder.detail.setOnClickListener {
             DataClass.journeyUID = currentUser.uid
             Log.d(TAG,currentUser.uid)
-            navController.navigate(R.id.action_search_journey_to_journey_page)
+            if(from == "search")
+                navController.navigate(R.id.action_search_journey_to_journey_page)
+            else
+                navController.navigate(R.id.action_all_journeys_to_journey_page)
         }
     }
     override fun getItemCount(): Int {

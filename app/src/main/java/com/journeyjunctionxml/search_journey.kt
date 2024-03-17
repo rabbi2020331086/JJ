@@ -25,7 +25,6 @@ class search_journey : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.search_journey, container, false)
-        val currentUser = Firebase.getCurrentUser()
         val navController = findNavController()
         val edittext = view.findViewById<EditText>(R.id.search_edit_text)
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroup)
@@ -57,14 +56,14 @@ class search_journey : Fragment() {
                         if(list.isEmpty()){
                             Toast.makeText(requireContext(), "No result Found!", Toast.LENGTH_SHORT).show()
                             recyclerview = view.findViewById(R.id.search_journey_recycler_view)
-                            adapter = search_journey_adapter(navController,list)
+                            adapter = search_journey_adapter("search",navController,list)
                             recyclerview.adapter = adapter
                             recyclerview.layoutManager = LinearLayoutManager(requireContext())
                         }
                         else{
                             Log.d(TAG,"Edittext work fine")
                             recyclerview = view.findViewById(R.id.search_journey_recycler_view)
-                            adapter = search_journey_adapter(navController,list)
+                            adapter = search_journey_adapter("search",navController,list)
                             recyclerview.adapter = adapter
                             recyclerview.layoutManager = LinearLayoutManager(requireContext())
                         }

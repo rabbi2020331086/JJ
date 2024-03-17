@@ -210,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:minHeight="100dp"
                     android:id="@+id/journey_page_introduction"
-                    android:text="@string/dummy_introduction"
+                    android:text=""
                     android:textColor="#000000"
                     android:textSize="16sp"
                     android:lineSpacingExtra="4dp"
@@ -248,8 +248,7 @@
                         android:layout_height="match_parent"
                         android:minHeight="100dp"
                         android:id="@+id/journey_page_check_in"
-                        android:text="1. Ambarkhana, Sylhet\n2. Shunamganj\n3. Moulovi Bazar\n4. Habiganj\n5. Dhaka"
-
+                        android:text=""
                         android:textColor="#000000"
                         android:lineSpacingExtra="4dp"
                         android:layout_marginStart="10dp"
@@ -288,8 +287,7 @@
                         android:layout_height="match_parent"
                         android:minHeight="100dp"
                         android:id="@+id/journey_page_destinations"
-                        android:text="1. Ambarkhana, Sylhet\n2. Shunamganj\n3. Moulovi Bazar\n4. Habiganj\n5. Dhaka"
-
+                        android:text= ""
                         android:textColor="#000000"
                         android:lineSpacingExtra="4dp"
                         android:layout_marginStart="10dp"
@@ -328,22 +326,7 @@
                         android:layout_height="match_parent"
                         android:minHeight="100dp"
                         android:id="@+id/journey_page_roadmap"
-                        android:text="Day 1: Departure from Haka
-
-Begin your journey from Haka, the picturesque hill station nestled in the Chittagong Hill Tracts region.
-Explore the scenic beauty of Haka and immerse yourself in the local culture and traditions.
-Day 2-3: Trekking in Bandarban
-
-Travel to Bandarban and embark on an exciting trekking adventure amidst the lush green hills and pristine forests.
-Discover hidden waterfalls, remote villages, and stunning viewpoints along the way.
-Day 4-5: Cultural Exploration in Chittagong
-
-Continue your journey to Chittagong, the bustling port city known for its vibrant culture and historical landmarks.
-Visit iconic attractions such as the Shahi Jama-e-Masjid, Foy's Lake, and Ethnological Museum.
-Day 6-7: Beach Retreat in Cox's Bazar
-
-Conclude your journey in Cox's Bazar, the longest natural sea beach in the world.
-Indulge in relaxation and recreation on the pristine sandy shores, enjoy thrilling water sports, and witness mesmerizing sunsets."
+                        android:text=""
                         android:textColor="#000000"
                         android:lineSpacingExtra="4dp"
                         android:textSize="16sp">
@@ -380,12 +363,7 @@ Indulge in relaxation and recreation on the pristine sandy shores, enjoy thrilli
                         android:layout_height="match_parent"
                         android:minHeight="100dp"
                         android:id="@+id/journey_page_highlights"
-                        android:text="Trek through the verdant hills of Bandarban and discover hidden gems off the beaten path.
-Experience the warmth of local hospitality and immerse yourself in the vibrant culture of indigenous communities.
-Explore ancient temples, archaeological sites, and colonial-era architecture in Chittagong.
-Unwind on the sun-kissed beaches of Cox's Bazar and soak in the tranquility of the Bay of Bengal.
-Sample delicious seafood delicacies and savor the flavors of coastal cuisine at beachfront restaurants.
-"
+                        android:text=""
                         android:textColor="#000000"
                         android:textSize="16sp"
                         android:lineSpacingExtra="4dp">

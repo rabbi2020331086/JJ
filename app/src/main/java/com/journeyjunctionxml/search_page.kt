@@ -41,18 +41,29 @@ class search_page : Fragment() {
                 if(searchText.isEmpty()) {
                     Toast.makeText(requireContext(), "Please enter a search query", Toast.LENGTH_SHORT).show()
                 } else {
-                    Firebase.getUsersByName(searchText, onComplete = {
-                            list ->
-                        if(list.isEmpty()){
-                            Toast.makeText(requireContext(), "No result Found!", Toast.LENGTH_SHORT).show()
-                        }
-                        else{
+                    if(android.util.Patterns.EMAIL_ADDRESS.matcher(searchText).matches()){
+                        Firebase.getUsersByEmail(searchText, onCompleted = {uid ->
+                            if(uid == "" || uid == null || uid == "null"){
+                                Toast.makeText(context,"No result",Toast.LENGTH_SHORT).show()
+                            }
+                            else{
+                                Firebase.getUserByUID(uid, onComplete = {list ->
+                                    recyclerView = view.findViewById(R.id.searchPagerecyclerView)
+                                    adapter = searchItemAdapter(requireContext(), navController, list)
+                                    recyclerView.adapter = adapter
+                                    recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                                })
+                            }
+                        })
+                    }
+                    else {
+                        Firebase.getUsersByName(searchText, onComplete = { list ->
                             recyclerView = view.findViewById(R.id.searchPagerecyclerView)
-                            adapter = searchItemAdapter(requireContext(), navController,list)
+                            adapter = searchItemAdapter(requireContext(), navController, list)
                             recyclerView.adapter = adapter
                             recyclerView.layoutManager = LinearLayoutManager(requireContext())
-                        }
-                    })
+                        })
+                    }
                 }
             }
 

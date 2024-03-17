@@ -37,6 +37,18 @@
         android:layout_height="48dp"
         android:background="@drawable/bg_edit_profile"
         android:layout_marginTop="5dp"
+        android:text="Pending"
+        android:textAllCaps="false"
+        android:textColor="#fff"
+        android:layout_marginHorizontal="5dp"
+        android:textSize="20sp"
+        android:id="@+id/requested_user">
+    </Button>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_edit_profile"
+        android:layout_marginTop="5dp"
         android:text="Invite explorers"
         android:textAllCaps="false"
         android:textColor="#fff"

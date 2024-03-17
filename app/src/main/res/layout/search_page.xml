@@ -68,13 +68,6 @@
                     android:textSize="18dp"
                     android:paddingStart="10dp"
                     android:textColorHint="#000000" />
-
-                <ImageButton
-                    android:id="@+id/searching"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="nothing"
-                    android:background="@android:drawable/ic_search_category_default" />
             </LinearLayout>
 
             <LinearLayout

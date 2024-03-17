@@ -8,6 +8,27 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="all_journeys">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1281" />
+                            <option name="y" value="-693" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_all_journeys_to_journey_page">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="create_account">
                     <value>
                       <LayoutPositions>
@@ -107,6 +128,11 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_friend_management_to_sent_req2">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
                         </option>
                       </LayoutPositions>
@@ -153,12 +179,17 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="477" />
-                            <option name="y" value="-266" />
+                            <option name="x" value="457" />
+                            <option name="y" value="-344" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_home2_to_all_journeys">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_home2_to_create_journey">
                               <value>
                                 <LayoutPositions />
@@ -214,8 +245,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="584" />
-                            <option name="y" value="-778" />
+                            <option name="x" value="759" />
+                            <option name="y" value="-1806" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -269,6 +300,18 @@
                               </value>
                             </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="journeys_member_check">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1022" />
+                            <option name="y" value="-1183" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -402,6 +445,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_pending_friend_request2_to_friend_management">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_pending_friend_request2_to_sent_req">
                               <value>
                                 <LayoutPositions />
@@ -527,6 +575,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_sent_req_to_friend_management">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_sent_req_to_pending_friend_request2">
                               <value>
                                 <LayoutPositions />
@@ -559,32 +612,6 @@
                               </value>
                             </entry>
                             <entry key="action_sign_in_to_home2">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="action_sign_in_to_switch_user_mode">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="switch_user_mode">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="1010" />
-                            <option name="y" value="-416" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_switch_user_mode_to_home2">
                               <value>
                                 <LayoutPositions />
                               </value>

@@ -26,6 +26,7 @@ class journey_page_members : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.journey_page_members, container, false)
         val title = view.findViewById<TextView>(R.id.journey_page_title)
+        val pending_requests = view.findViewById<Button>(R.id.requested_user)
         val navController = findNavController()
         Firebase.getJourneyPageMembers(DataClass.journeyUID, onComplete = {
             list ->

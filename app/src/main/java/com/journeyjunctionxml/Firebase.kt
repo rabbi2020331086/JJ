@@ -262,6 +262,72 @@ class Firebase {
                     }
             }
         }
+        fun getPhotos (uid: String, onComplete: (List<String>) -> Unit){
+            val urls = mutableListOf<String>()
+            var cnt = 0
+            db.collection("photos")
+                .document(uid)
+                .get()
+                .addOnSuccessListener { docs ->
+                    if(docs.exists()){
+                        val data = docs.data
+                        if (data != null) {
+                            for ((key, value) in data) {
+                                if (value is String) {
+                                    urls.add(value)
+                                }
+                            }
+                            cnt++
+                            if(cnt == 2){
+                                onComplete(urls.toList())
+                            }
+                        }
+                    }
+                    else{
+                        cnt++
+                        if(cnt == 2){
+                            onComplete(urls.toList())
+                        }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    cnt++
+                    if(cnt == 2){
+                        onComplete(urls.toList())
+                    }
+                }
+            db.collection("profile_pictures")
+                .document(uid)
+                .get()
+                .addOnSuccessListener { docs ->
+                    if(docs.exists()){
+                        val data = docs.data
+                        if (data != null) {
+                            for ((key, value) in data) {
+                                if (value is String) {
+                                    urls.add(value)
+                                }
+                            }
+                            cnt++
+                            if(cnt == 2){
+                                onComplete(urls.toList())
+                            }
+                        }
+                    }
+                    else{
+                        cnt++
+                        if(cnt == 2){
+                            onComplete(urls.toList())
+                        }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    cnt++
+                    if(cnt == 2){
+                        onComplete(urls.toList())
+                    }
+                }
+        }
         fun getJourneyPagePhotos(uid: String, onCompleted: (List<journey_page_photos_model>) -> Unit){
             db.collection("journeys")
                 .document(uid)
@@ -282,6 +348,30 @@ class Firebase {
                 }
                 .addOnFailureListener {
                     onCompleted(emptyList())
+                }
+        }
+        fun getAllJourney(onComplete: (List<TripsModel>) -> Unit){
+            db.collection("journeys")
+                .get()
+                .addOnSuccessListener { documents ->
+                    val userList = mutableListOf<TripsModel>()
+                    for (document in documents) {
+                        try {
+                            val journey = document.toObject(TripsModel::class.java)
+                            journey.uid = document.id
+                            userList.add(journey)
+                            Log.d(TAG, journey.toString())
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error deserializing document ${document.id}", e)
+                            // Handle or log error as needed, e.g., incorrect data types
+                        }
+                    }
+                    Log.d(TAG, "Documents fetched successfully")
+                    onComplete(userList)
+                }
+                .addOnFailureListener { exception ->
+                    Log.e(TAG, "Error fetching documents", exception)
+                    onComplete(emptyList())
                 }
         }
         fun getJourneybySearch(namePrefix: String, type: String, onCompleted: (List<TripsModel>) -> Unit) {
@@ -331,6 +421,41 @@ class Firebase {
                 }
         }
 
+        fun getUsersByEmail(email: String, onCompleted: (String) -> Unit){
+            db.collection("users_by_email")
+                .document(email)
+                .get()
+                .addOnSuccessListener { docs ->
+                    if(docs.exists()){
+                        onCompleted(docs.getString("uid").toString())
+                    }
+                    else
+                        onCompleted("")
+                }
+                .addOnFailureListener { e ->
+                    onCompleted("")
+                }
+        }
+        fun getUserByUID(uid: String, onComplete: (List<search_users_model>) -> Unit){
+            db.collection("users")
+                .document(uid)
+                .get()
+                .addOnSuccessListener { docs ->
+                    if(docs.exists()) {
+                        val userList = mutableListOf<search_users_model>()
+                        val userName = docs.getString("name") ?: ""
+                        val user = search_users_model(uid, userName)
+                        userList.add(user)
+                        onComplete(userList)
+                    }
+                    else{
+                        onComplete(emptyList())
+                    }
+                }
+                .addOnFailureListener {
+                    onComplete(emptyList())
+                }
+        }
         fun getUsersByName(namePrefix: String, onComplete: (List<search_users_model>) -> Unit) {
             val lowerCaseNamePrefix = namePrefix.toLowerCase()
 
@@ -443,6 +568,56 @@ class Firebase {
                 callback(null)
             }
         }
+        fun ismemberOrWannabeMember(uid: String,type: String,journeyID: String,onCompleted: (Boolean) -> Unit){
+            db.collection("journeys")
+                .document(journeyID)
+                .collection(type)
+                .document(uid)
+                .get()
+                .addOnSuccessListener {docs ->
+                    if(docs.exists())
+                        onCompleted(true)
+                    else
+                        onCompleted(false)
+                }
+                .addOnFailureListener { e ->
+                    onCompleted(false)
+                }
+        }
+        fun sent_invitation_to_journey(uid: String, name: String, juid: String, onCompleted: (Boolean) -> Unit){
+            val data = hashMapOf(
+                "uid" to uid,
+                "name" to name
+            )
+            db.collection("journeys")
+                .document(juid)
+                .collection("pending")
+                .document(uid)
+                .set(data)
+                .addOnSuccessListener {
+                    onCompleted(true)
+                }
+                .addOnFailureListener {
+                    onCompleted(false)
+                }
+        }
+        fun sentInviteToFriend(uid: String,type: String,by_whom: String,journeyID: String,onCompleted: (Boolean) -> Unit){
+            val data = hashMapOf(
+                "journeyID" to journeyID,
+                "by_whom" to by_whom
+            )
+            db.collection("users")
+                .document(uid)
+                .collection(type)
+                .document(journeyID)
+                .set(data)
+                .addOnSuccessListener {
+                    onCompleted(true)
+                }
+                .addOnFailureListener {
+                    onCompleted(false)
+                }
+        }
         fun getJourneyFields (uid: String,field: String, onCompleted: (String) -> Unit){
             db.collection("journeys")
                 .document(uid)
@@ -471,18 +646,15 @@ class Firebase {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val documents = task.result ?: return@addOnCompleteListener onComplete(emptyList())
-                        if (documents.isEmpty) onComplete(emptyList()) // Early return if no journeys
-
-                        var pendingQueries = documents.size() // Set counter for pending queries
+                        if (documents.isEmpty) onComplete(emptyList())
+                        var pendingQueries = documents.size()
                         for (document in documents) {
                             val foundString = document.getString("journeyID") ?: ""
                             db.collection("journeys")
                                 .document(foundString)
                                 .get()
                                 .addOnSuccessListener { document ->
-
                                     Log.d(TAG,document.toString())
-
                                     val trip = TripsModel(
                                         picture = document.getString("picture") ?: "",
                                         title = document.getString("title") ?: "",

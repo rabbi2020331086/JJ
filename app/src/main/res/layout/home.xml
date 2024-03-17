@@ -71,6 +71,18 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
         <ImageButton
+            android:id="@+id/journeys"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/journeys_icon"
+            android:background="@android:color/transparent"
+            android:contentDescription="notification"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <ImageButton
             android:id="@+id/notification_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
