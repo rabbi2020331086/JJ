@@ -41,6 +41,15 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
     <ImageButton
+        android:id="@+id/search_item_reject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/reject_friend_icon"
+        android:layout_margin="1dp"
+        android:visibility="gone"
+        android:background="@android:color/transparent"
+        android:contentDescription="profile"/>
+    <ImageButton
         android:id="@+id/search_item_add_friend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

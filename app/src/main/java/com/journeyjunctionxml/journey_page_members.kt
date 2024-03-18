@@ -24,23 +24,30 @@ class journey_page_members : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val journeyID = DataClass.journeyUID
         val view = inflater.inflate(R.layout.journey_page_members, container, false)
         val title = view.findViewById<TextView>(R.id.journey_page_title)
         val pending_requests = view.findViewById<Button>(R.id.requested_user)
         val navController = findNavController()
-        Firebase.getJourneyPageMembers(DataClass.journeyUID, onComplete = {
+        Firebase.getJourneyPageMembers(DataClass.journeyUID,"members", onComplete = {
             list ->
             if(list.isEmpty()){
                 Toast.makeText(requireContext(), "No result Found!", Toast.LENGTH_SHORT).show()
             }
             else{
                 recyclerView = view.findViewById(R.id.recyclerView)
-                adapter = journey_page_members_adapter(requireContext(), navController,list)
+                adapter = journey_page_members_adapter("members",requireContext(), navController,list)
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(requireContext())
             }
         })
-
+        Firebase.checkIfMemberExist("pending", journeyID, onCompleted = {istrue ->
+            if(istrue)
+                pending_requests.visibility = View.VISIBLE
+        })
+        pending_requests.setOnClickListener {
+            findNavController().navigate(R.id.action_journey_page_members2_to_journey_page_pending_request)
+        }
         val invite = view.findViewById<Button>(R.id.journey_page_member_add)
         invite.setOnClickListener {
             val inflater = LayoutInflater.from(context)

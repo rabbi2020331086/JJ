@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView
 class all_journeys : Fragment() {
     private lateinit var recyclerview: RecyclerView
     private lateinit var adapter: search_journey_adapter
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,7 +29,7 @@ class all_journeys : Fragment() {
         Firebase.getAllJourney  (onComplete = {list ->
             Log.d(ContentValues.TAG,"Edittext work fine")
             recyclerview = view.findViewById(R.id.recyclerView)
-            adapter = search_journey_adapter("all_journeys",navController,list)
+            adapter = search_journey_adapter(requireContext(),"all_journeys",navController,list)
             recyclerview.adapter = adapter
             recyclerview.layoutManager = LinearLayoutManager(requireContext())
         })
@@ -45,7 +44,7 @@ class all_journeys : Fragment() {
                     Firebase.getAllJourney(onComplete = {list ->
                         Log.d(ContentValues.TAG,"Edittext work fine")
                         recyclerview = view.findViewById(R.id.recyclerView)
-                        adapter = search_journey_adapter("all_journeys",navController,list)
+                        adapter = search_journey_adapter(requireContext(),"all_journeys",navController,list)
                         recyclerview.adapter = adapter
                         recyclerview.layoutManager = LinearLayoutManager(requireContext())
                     })
@@ -53,7 +52,7 @@ class all_journeys : Fragment() {
                     Firebase.getJourneybySearch(searchText,"check_in", onCompleted = {list ->
                         Log.d(ContentValues.TAG,"Edittext work fine")
                         recyclerview = view.findViewById(R.id.recyclerView)
-                        adapter = search_journey_adapter("all_journeys",navController,list)
+                        adapter = search_journey_adapter(requireContext(),"all_journeys",navController,list)
                         recyclerview.adapter = adapter
                         recyclerview.layoutManager = LinearLayoutManager(requireContext())
                 })

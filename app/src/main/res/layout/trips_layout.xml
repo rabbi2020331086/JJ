@@ -31,6 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="250dp"
             android:layout_weight="1"
+            android:maxHeight="270dp"
             android:layout_marginHorizontal="1dp"
             android:id="@+id/trip_item_image"
             android:src="@drawable/get_started_pic"
@@ -207,12 +208,23 @@
                 android:orientation="vertical">
                 <Button
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="30dp"
                     android:background="@drawable/button"
                     android:text="See detail"
                     android:textAllCaps="false"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:id="@+id/trips_item_see_detail"
+                    android:textColor="#ffffff">
+                </Button>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/button"
+                    android:text="confirm"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    android:id="@+id/trips_item_confirm"
+                    android:layout_marginTop="1dp"
                     android:textColor="#ffffff">
                 </Button>
             </LinearLayout>

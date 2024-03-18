@@ -2,6 +2,7 @@ package com.journeyjunctionxml
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -41,7 +42,6 @@ class journey_page : Fragment() {
         val view = inflater.inflate(R.layout.journey_page, container, false)
         val uid = Firebase.getCurrentUser()?.uid.toString()
         val journeyID = DataClass.journeyUID
-        val adminbutton = view.findViewById<Button>(R.id.journey_page_manage_journey)
         introduction_layout = view.findViewById(R.id.journey_page_introduction_layout)
         checkin_layout = view.findViewById(R.id.journey_page_checi_in_layout)
         destination_layout = view.findViewById(R.id.journey_page_destinations_layout)
@@ -59,36 +59,105 @@ class journey_page : Fragment() {
         manage_journey = view.findViewById(R.id.journey_page_manage_journey)
         val photos = view.findViewById<ImageButton>(R.id.journey_page_photos)
         val members = view.findViewById<ImageView>(R.id.journey_page_members)
-        Firebase.getJourneyFields(DataClass.journeyUID,"owner") { owner ->
-            if (owner == "null" || owner == null) {
-                adminbutton.visibility = View.GONE
-                Toast.makeText(requireContext(), "Cant be found", Toast.LENGTH_SHORT).show()
-            } else {
-                if(owner == uid){
-                    adminbutton.visibility = View.VISIBLE
-                    isadmin = true
+        val notice = view.findViewById<ImageButton>(R.id.journey_page_notifications)
+
+        notice.setOnClickListener {
+            findNavController().navigate(R.id.action_journey_page_to_journey_page_notification)
+        }
+
+        manage_journey.setOnClickListener {
+            if(isadmin){
+
+                return@setOnClickListener
+            }
+            if(ismember){
+                Firebase.delete_journey_user("members",journeyID,uid, onCompleted = {istrue ->
+                    findNavController().navigate(R.id.action_journey_page_self)
+                })
+                return@setOnClickListener
+            }
+            if(wannabeMember){
+
+                return@setOnClickListener
+            }
+            Firebase.getuserinfo(uid,"name", onCompleted = {name ->
+                if(name == ""){
+                    Toast.makeText(requireContext(),"Error joining the journey",Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    adminbutton.visibility = View.GONE
-                    isadmin = false
+                    Firebase.askToJoin(uid,name,journeyID, onCompleted = {istrue ->
+                        if(istrue){
+                            wannabeMember=true
+                            manage_journey.setText("Cancel join request")
+                            Toast.makeText(requireContext(),"Join request sent successfully",Toast.LENGTH_SHORT).show()
+                        }
+                    })
                 }
-            }
+            })
         }
+
+
+        Firebase.isExistinJourney(uid,journeyID, onCompleted = {istrue ->
+            if(istrue){
+                buttons_layout.visibility = View.VISIBLE
+                ismember = true
+                manage_journey.setText("Leave journey")
+                manage_journey.setTextColor(Color.RED)
+                manage_journey.visibility = View.VISIBLE
+                LoadJourney()
+            }
+            else{
+                Firebase.ismemberOrWannabeMember(uid,"pending",journeyID, onCompleted = {istrue ->
+                    if(!istrue){
+                        Firebase.getJourneyFields(DataClass.journeyUID,"owner") { owner ->
+                            if (owner == "null" || owner == null) {
+                                Toast.makeText(requireContext(), "Cant be found", Toast.LENGTH_SHORT).show()
+                            } else {
+                                if(owner == uid){
+                                    LoadJourney()
+                                    isadmin = true
+                                    manage_journey.setText("Manage Journey")
+                                    manage_journey.visibility = View.VISIBLE
+                                    buttons_layout.visibility = View.VISIBLE
+                                }
+                                else{
+                                    LoadJourney()
+                                    manage_journey.setText("Ask to join")
+                                    manage_journey.visibility = View.VISIBLE
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        manage_journey.setText("Cancel join request")
+                        wannabeMember = true
+                        manage_journey.visibility = View.VISIBLE
+                        LoadJourney()
+                    }
+                })
+            }
+        })
         photos.setOnClickListener {
-            findNavController().navigate(R.id.action_journey_page_to_journey_page_photos2)
+            if(ismember || isadmin)
+                findNavController().navigate(R.id.action_journey_page_to_journey_page_photos2)
+            else
+                return@setOnClickListener
         }
         members.setOnClickListener {
-            findNavController().navigate(R.id.action_journey_page_to_journey_page_members2)
+            if(ismember || isadmin)
+                findNavController().navigate(R.id.action_journey_page_to_journey_page_members2)
+            else
+                return@setOnClickListener
         }
         if(Firebase.getCurrentUser() == null){
             Toast.makeText(requireContext(), "Cant be found", Toast.LENGTH_SHORT).show()
         }
-        Firebase.CheckMyJourney(DataClass.journeyUID,uid, onCompleted = {
-            d ->
-                if(!d){
-                    buttons_layout.visibility = View.GONE
-                }
-        })
+//        Firebase.CheckMyJourney(DataClass.journeyUID,uid, onCompleted = {
+//            d ->
+//                if(!d){
+//                    buttons_layout.visibility = View.GONE
+//                }
+//        })
         introduction_layout.setOnClickListener {
             if(isadmin == false)
                 return@setOnClickListener
@@ -110,11 +179,9 @@ class journey_page : Fragment() {
                 edit_field(requireContext(),"Highlights","highlights");
             }
         }
-        LoadJourney()
         return view
     }
     fun LoadJourney(){
-        isadmin = true
         Firebase.loadJourney(requireContext(), DataClass.journeyUID) { map ->
             if (map == null) {
                 Toast.makeText(context, "Journey does not exist!", Toast.LENGTH_SHORT).show()

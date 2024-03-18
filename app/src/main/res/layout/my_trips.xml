@@ -57,11 +57,22 @@
             android:gravity="center_horizontal"
             android:layout_height="wrap_content">
             <Button
-                android:layout_width="match_parent"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:background="#70CCD9"
                 android:id="@+id/my_trips_past_tour_button"
                 android:text="see past tour"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="16sp">
+            </Button>
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:background="#70CCD9"
+                android:id="@+id/my_trips_pending_tour"
+                android:text="Pending"
                 android:textStyle="bold"
                 android:textColor="#000000"
                 android:textSize="16sp">

@@ -176,6 +176,12 @@
         <action
             android:id="@+id/action_my_trips_to_my_past_trip"
             app:destination="@id/my_past_trip" />
+        <action
+            android:id="@+id/action_my_trips_to_pending_trip"
+            app:destination="@id/pending_trip" />
+        <action
+            android:id="@+id/action_my_trips_to_journey_page"
+            app:destination="@id/journey_page" />
     </fragment>
     <fragment
         android:id="@+id/create_journey"
@@ -230,6 +236,12 @@
         <action
             android:id="@+id/action_journey_page_to_journey_page_members2"
             app:destination="@id/journey_page_members2" />
+        <action
+            android:id="@+id/action_journey_page_self"
+            app:destination="@id/journey_page" />
+        <action
+            android:id="@+id/action_journey_page_to_journey_page_notification"
+            app:destination="@id/journey_page_notification" />
     </fragment>
     <fragment
         android:id="@+id/journey_page_photos2"
@@ -244,7 +256,11 @@
         android:id="@+id/journey_page_members2"
         android:name="com.journeyjunctionxml.journey_page_members"
         android:label="journey_page_members"
-        tools:layout="@layout/journey_page_members" />
+        tools:layout="@layout/journey_page_members" >
+        <action
+            android:id="@+id/action_journey_page_members2_to_journey_page_pending_request"
+            app:destination="@id/journey_page_pending_request" />
+    </fragment>
     <fragment
         android:id="@+id/friend_management"
         android:name="com.journeyjunctionxml.friend_management"
@@ -298,4 +314,30 @@
         android:name="com.journeyjunctionxml.journeys_member_check"
         android:label="journeys_member_check"
         tools:layout="@layout/journeys_member_check" />
+    <fragment
+        android:id="@+id/pending_trip"
+        android:name="com.journeyjunctionxml.pending_trip"
+        android:label="pending_trip"
+        tools:layout="@layout/pending_trip" />
+    <fragment
+        android:id="@+id/journey_page_pending_request"
+        android:name="com.journeyjunctionxml.journey_page_pending_request"
+        android:label="journey_page_pending_request"
+        tools:layout="@layout/journey_page_pending_request" >
+        <action
+            android:id="@+id/action_journey_page_pending_request_to_journey_page_members2"
+            app:destination="@id/journey_page_members2" />
+    </fragment>
+    <fragment
+        android:id="@+id/journey_page_notification"
+        android:name="com.journeyjunctionxml.journey_page_notification"
+        android:label="journey_page_notification"
+        tools:layout="@layout/journey_page_notification" >
+        <action
+            android:id="@+id/action_journey_page_notification_to_journey_page"
+            app:destination="@id/journey_page" />
+        <action
+            android:id="@+id/action_journey_page_notification_self"
+            app:destination="@id/journey_page_notification" />
+    </fragment>
 </navigation>

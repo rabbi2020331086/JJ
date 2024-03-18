@@ -56,14 +56,14 @@ class search_journey : Fragment() {
                         if(list.isEmpty()){
                             Toast.makeText(requireContext(), "No result Found!", Toast.LENGTH_SHORT).show()
                             recyclerview = view.findViewById(R.id.search_journey_recycler_view)
-                            adapter = search_journey_adapter("search",navController,list)
+                            adapter = search_journey_adapter(requireContext(),"search",navController,list)
                             recyclerview.adapter = adapter
                             recyclerview.layoutManager = LinearLayoutManager(requireContext())
                         }
                         else{
                             Log.d(TAG,"Edittext work fine")
                             recyclerview = view.findViewById(R.id.search_journey_recycler_view)
-                            adapter = search_journey_adapter("search",navController,list)
+                            adapter = search_journey_adapter(requireContext(),"search",navController,list)
                             recyclerview.adapter = adapter
                             recyclerview.layoutManager = LinearLayoutManager(requireContext())
                         }

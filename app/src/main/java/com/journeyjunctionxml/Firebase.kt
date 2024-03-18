@@ -27,6 +27,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.Date
 import java.util.Locale
 import java.util.UUID
 import kotlin.coroutines.resume
@@ -155,7 +156,7 @@ class Firebase {
                                 list.add(search_users_model(uid, name))
                             }
                         }
-                        onComplete(list) // Call onComplete with the list
+                        onComplete(list)
                     }
                     .addOnFailureListener { exception ->
                         Log.w(TAG, "Error getting pending requests: ", exception)
@@ -188,6 +189,24 @@ class Firebase {
                     }
             }
         }
+        fun checkIfMemberExist(type: String, journeyID: String, onCompleted: (Boolean) -> Unit){
+            db.collection("journeys")
+                .document(journeyID)
+                .collection(type)
+                .get()
+                .addOnSuccessListener { docs ->
+                    // Check if the size of the docs list is greater than 0
+                    if (!docs.isEmpty) {
+                        onCompleted(true) // Documents exist
+                    } else {
+                        onCompleted(false) // No documents found
+                    }
+                }
+                .addOnFailureListener {
+                    onCompleted(false) // Error occurred, assume no documents found
+                }
+        }
+
         fun checkIfFriendExists(uidToCheck: String,onCompleted: (Boolean) -> Unit) {
             val currentUser = getCurrentUser()
             if (currentUser != null) {
@@ -568,6 +587,37 @@ class Firebase {
                 callback(null)
             }
         }
+        fun isInMyPending(uid: String,journeyID: String,onCompleted: (Boolean) -> Unit){
+            db.collection("users")
+                .document(uid)
+                .collection("pending")
+                .document(journeyID)
+                .get()
+                .addOnSuccessListener {docs ->
+                    onCompleted(docs.exists())
+                }
+                .addOnFailureListener {
+                    onCompleted(false)
+                }
+
+        }
+        fun askToJoin(uid: String,name: String,journeyID: String,onCompleted: (Boolean) -> Unit){
+            val data = hashMapOf(
+                "uid" to uid,
+                "name" to name
+            )
+            db.collection("journeys")
+                .document(journeyID)
+                .collection("pending")
+                .document(uid)
+                .set(data)
+                .addOnSuccessListener {
+                    onCompleted(true)
+                }
+                .addOnFailureListener {
+                    onCompleted(false)
+                }
+        }
         fun ismemberOrWannabeMember(uid: String,type: String,journeyID: String,onCompleted: (Boolean) -> Unit){
             db.collection("journeys")
                 .document(journeyID)
@@ -584,14 +634,118 @@ class Firebase {
                     onCompleted(false)
                 }
         }
-        fun sent_invitation_to_journey(uid: String, name: String, juid: String, onCompleted: (Boolean) -> Unit){
+        fun delete_journey_from_user(type: String, uid: String, journeyID: String, onCompleted: (Boolean) -> Unit){
+            db.collection("users")
+                .document(uid)
+                .collection(type)
+                .document(journeyID)
+                .delete()
+                .addOnSuccessListener {
+                    onCompleted(true)
+                }
+                .addOnFailureListener { e ->
+                    println("Error deleting document: $e")
+                    onCompleted(false)
+                }
+        }
+        fun delete_journey_user(from: String, journeyID: String,uid: String, onCompleted: (Boolean) -> Unit){
+            db.collection("journeys")
+                .document(journeyID)
+                .collection(from)
+                .document(uid)
+                .delete()
+                .addOnSuccessListener {
+                    onCompleted(true)
+                }
+        }
+        fun move_user_in_journey(from: String, to: String, uid: String, journeyID: String, onCompleted: (Boolean) -> Unit){
+            db.collection("journeys")
+                .document(journeyID)
+                .collection(from)
+                .document(uid)
+                .get()
+                .addOnSuccessListener { docs ->
+                    val data = docs.data
+                    if(data != null){
+                        db.collection("journeys")
+                            .document(journeyID)
+                            .collection(to)
+                            .document(uid)
+                            .set(data)
+                            .addOnSuccessListener {
+                                delete_journey_user(from,journeyID,uid,onCompleted = {istrue ->
+                                    if(istrue)
+                                        onCompleted(true)
+                                })
+                            }
+                            .addOnFailureListener {
+                                onCompleted(false)
+                            }
+
+                    }
+                    else
+                        onCompleted(false)
+                }
+                .addOnFailureListener {
+                    onCompleted(false)
+                }
+        }
+        fun move_journey_in_users_collection(from: String,to: String, uid: String, journeyID: String, onCompleted: (Boolean) -> Unit){
+            db.collection("users")
+                .document(uid)
+                .collection(from)
+                .document(journeyID)
+                .get()
+                .addOnSuccessListener { doc ->
+                    if (doc.exists()) {
+                        val data = doc.data
+                        if (data != null) {
+                            db.collection("users")
+                                .document(uid)
+                                .collection(to)
+                                .document(journeyID)
+                                .set(data)
+                                .addOnSuccessListener {
+                                    db.collection("users")
+                                        .document(uid)
+                                        .collection(from)
+                                        .document(journeyID)
+                                        .delete()
+                                        .addOnSuccessListener {
+                                            onCompleted(true)
+                                        }
+                                        .addOnFailureListener {e ->
+                                            onCompleted(false)
+                                        }
+
+                                }
+                                .addOnFailureListener { e ->
+                                    println("Error moving document: $e")
+                                    onCompleted(false)
+                                }
+                        } else {
+                            println("Document data is null.")
+                            onCompleted(false)
+                        }
+                    } else {
+                        println("Document does not exist.")
+                        onCompleted(false)
+                    }
+                }
+                .addOnFailureListener { e ->
+                    // An error occurred while fetching the document
+                    println("Error fetching document: $e")
+                    onCompleted(false)
+                }
+        }
+        fun sent_request_to_journey(type: String,uid: String, name: String, juid: String, onCompleted: (Boolean) -> Unit){
             val data = hashMapOf(
                 "uid" to uid,
                 "name" to name
             )
             db.collection("journeys")
                 .document(juid)
-                .collection("pending")
+                .collection(type)
                 .document(uid)
                 .set(data)
                 .addOnSuccessListener {
@@ -633,15 +787,14 @@ class Firebase {
         fun search_tour(){
 
         }
-        fun get_upcoming_tour(context: Context, uid: String, onComplete: (List<TripsModel>) -> Unit) {
+        fun get_upcoming_tour(context: Context,type: String, uid: String, onComplete: (List<TripsModel>) -> Unit) {
             val tripsList = mutableListOf<TripsModel>()
-
             val progressDialog = ProgressDialog(context)
             progressDialog.setMessage("Loading...")
             progressDialog.setCancelable(false)
             progressDialog.show()
 
-            db.collection("users").document(uid).collection("own_journey")
+            db.collection("users").document(uid).collection(type)
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -664,18 +817,18 @@ class Firebase {
                                         budget = document.getString("budget") ?: "",
                                         check_in = document.getString("check_in") ?: "",
                                         vacancy = document.getString("vacancy") ?: "",
-                                        uid = document.getString("uid") ?: "",
+                                        uid = foundString,
                                         gender = document.getString("gender") ?: "",
                                         owner = document.getString("owner") ?: ""
                                     )
                                     tripsList.add(trip)
                                     pendingQueries--
                                     if (pendingQueries <= 0) {
-                                        onComplete(tripsList) // Call onComplete when all queries are done
+                                        onComplete(tripsList)
                                     }
                                 }
                                 .addOnFailureListener {
-                                    pendingQueries-- // Ensure to decrement on failure too
+                                    pendingQueries--
                                     if (pendingQueries <= 0) {
                                         onComplete(tripsList)
                                     }
@@ -880,7 +1033,6 @@ class Firebase {
                         }
 
                 }
-
                 fun myinfo() {
                     get_docs_info("users", currentUser.uid) { data ->
                         if (data != null) {
@@ -904,6 +1056,50 @@ class Firebase {
                     }
                 }
             }
+        }
+        fun getNotifications(journeyID: String, onComplete: (List<notification_model>) -> Unit) {
+            db.collection("journeys")
+                .document(journeyID)
+                .collection("notices")
+                .get()
+                .addOnSuccessListener { all_notices ->
+                    val notifications = mutableListOf<notification_model>()
+                    for (document in all_notices.documents) {
+                        val notification = document.getString("text") ?: ""
+                        val uid = document.getString("uid") ?: ""
+                        val name = document.getString("name") ?: ""
+                        val createTime = document.getTimestamp("timestampField")?.toDate() ?: Date()
+                        val notificationModel = notification_model(notification, uid, name, createTime)
+                        notifications.add(notificationModel)
+                    }
+                    // Sort notifications by timestamp in descending order
+                    notifications.sortByDescending { it.timestampField }
+
+                    onComplete(notifications)
+                }
+                .addOnFailureListener {
+                    onComplete(emptyList())
+                }
+        }
+        fun create_notice(journeyID: String,text: String, name: String,uid: String,onCompleted: (Boolean) -> Unit){
+            val data = hashMapOf(
+                "text" to text,
+                "journeyID" to journeyID,
+                "name" to name,
+                "uid" to uid,
+                "timestampField" to FieldValue.serverTimestamp()
+            )
+            db.collection("journeys")
+                .document(journeyID)
+                .collection("notices")
+                .add(data)
+                .addOnSuccessListener {
+                    onCompleted(true)
+                }
+                .addOnFailureListener {
+                    onCompleted(false)
+                }
+
         }
         fun uploadImageURLToJourney(url: String, owner: String, onCompleted: (Boolean) -> Unit) {
             val data = hashMapOf(
@@ -935,7 +1131,6 @@ class Firebase {
             uploadTask.addOnProgressListener { snapshot ->
                 progressDialog.setMessage("Uploading")
             }
-
             uploadTask.continueWithTask { task ->
                 if (!task.isSuccessful) {
                     task.exception?.let { throw it }
@@ -1104,10 +1299,10 @@ class Firebase {
                     onCompleted(emptyList())
                 }
         }
-        fun getJourneyPageMembers(journeyID: String,onComplete: (List<search_users_model>) -> Unit){
+        fun getJourneyPageMembers(journeyID: String,type: String,onComplete: (List<search_users_model>) -> Unit){
             db.collection("journeys")
                 .document(journeyID)
-                .collection("members")
+                .collection(type)
                 .get()
                 .addOnSuccessListener { documents ->
                     val userList = mutableListOf<search_users_model>()

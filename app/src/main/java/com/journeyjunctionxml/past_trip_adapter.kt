@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 class past_trip_adapter(private val context: Context, private val navController: NavController, private val userList: List<TripsModel>) :
     RecyclerView.Adapter<past_trip_adapter.PastTripViewHolder>() {
-
     inner class PastTripViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.trips_title)
         val picture: ImageView = itemView.findViewById(R.id.trip_item_image)
