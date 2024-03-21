@@ -76,6 +76,7 @@ class upcoming_trip_adapter(private val type: String,private val context: Contex
             }
         }
         else{
+            holder.vacancy.setText("Available")
             holder.confirm_button.visibility = View.GONE
             holder.detail_button.setOnClickListener{
                 DataClass.journeyUID = journeyID

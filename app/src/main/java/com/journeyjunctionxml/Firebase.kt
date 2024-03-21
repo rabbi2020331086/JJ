@@ -35,8 +35,6 @@ class Firebase {
     companion object {
         var idtype = "-1"
         var name = "-1"
-        var postList = mutableListOf<Pair<String, Map<String, Any>>>()
-        var sent_req: MutableList<Map<String, Any>> = mutableListOf()
         var xx = 1
         var imageurl = "-1"
         private val auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -45,24 +43,6 @@ class Firebase {
         fun getCurrentUser(): FirebaseUser? {
             return auth.currentUser
         }
-//        fun sort() {
-//            val sortedPostList = postList.sortedBy { pair ->
-//                val timestamp = pair.second["timestamp"] as? Long
-//                timestamp ?: Long.MAX_VALUE // Default to a very large value if timestamp is null
-//            }
-//
-//            sortedPostList.forEach { pair ->
-//                val postId = pair.first
-//                val postData = pair.second
-//                val timestamp = postData["timestamp"] as? Long // Safe cast using `as?`
-//                if (timestamp != null) {
-//                    println("Post ID: $postId, Timestamp: $timestamp")
-//                } else {
-//                    println("Post ID: $postId, Timestamp: null")
-//                }
-//            }
-//        }
-
         fun loadJourney(context: Context, uid: String, onCompleted: (MutableMap<String, String>) -> Unit) {
             db.collection("journeys")
                 .document(uid)
@@ -98,34 +78,47 @@ class Firebase {
                     onCompleted(false)
                 }
         }
-        fun ReactPost(uid: String, pid: String,onCompleted: (Boolean) -> Unit){
-
+        fun isEmailVerified(onResult: (Boolean) -> Unit) {
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            currentUser?.reload()?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val isVerified = currentUser.isEmailVerified
+                    onResult(isVerified)
+                } else {
+                    onResult(false)
+                }
+            }
         }
+
         fun getPost(uid: String, onComplete: (List<PostModel>) -> Unit) {
-            val list = mutableListOf<PostModel>() // Initialize as mutable list
             db.collection("users")
                 .document(uid)
                 .collection("posts")
                 .get()
                 .addOnSuccessListener { posts ->
+                    val list = mutableListOf<PostModel>()
                     for (document in posts) {
+                        val createTime = document.getTimestamp("timestampField")?.toDate() ?: Date()
                         val pp = PostModel(
                             profileName = document.getString("name") ?: "",
                             contentCaption = document.getString("caption") ?: "",
                             contentImage = document.getString("imageUrl") ?: "",
                             reactCount = document.getString("react").toString() ?: "",
                             uid = document.getString("owner") ?: "",
-                            pid = document.id
+                            pid = document.id,
+                            time = createTime
                         )
                         list.add(pp)
                     }
-                    onComplete(list.toList())
+                    list.sortByDescending { it.time }
+                    onComplete(list)
                 }
                 .addOnFailureListener { exception ->
                     Log.e(TAG, "Error getting posts for user $uid", exception)
                     onComplete(emptyList())
                 }
         }
+
         fun updateJourneyField(context: Context,uid: String, field: String, text: String){
             val userData = hashMapOf(
                 field to text
@@ -690,6 +683,42 @@ class Firebase {
                     onCompleted(false)
                 }
         }
+        fun react(myuid: String,uid: String, postID: String, onCompleted: (String) -> Unit){
+            db.collection("users")
+                .document(uid)
+                .collection("posts")
+                .document(postID)
+                .get()
+                .addOnSuccessListener {docs ->
+                    val current = docs.getString("react") ?: "0"
+                    var num = current.toInt()+1
+                    val data = hashMapOf(
+                        "react" to num.toString()
+                    )
+                    val data1 = hashMapOf(
+                        "uid" to myuid
+                    )
+                    db.collection("users")
+                        .document(uid)
+                        .collection("posts")
+                        .document(postID)
+                        .set(data, SetOptions.merge())
+                        .addOnSuccessListener {
+                            db.collection("users")
+                                .document(uid)
+                                .collection("posts")
+                                .document(postID)
+                                .collection("reacted")
+                                .document(myuid)
+                                .set(data1)
+                            onCompleted(num.toString())
+
+                        }
+                        .addOnFailureListener {
+                            onCompleted(num.toString())
+                        }
+                }
+        }
         fun move_journey_in_users_collection(from: String,to: String, uid: String, journeyID: String, onCompleted: (Boolean) -> Unit){
             db.collection("users")
                 .document(uid)
@@ -909,7 +938,87 @@ class Firebase {
                     onComplete(emptyList())
                 }
         }
-
+        fun setProfile(uid: String, field: String,text: String, onCompleted: (Boolean) -> Unit){
+            val data = hashMapOf(
+                field to text
+            )
+            db.collection("users")
+                .document(uid)
+                .set(data, SetOptions.merge())
+                .addOnSuccessListener {
+                    onCompleted(true)
+                }
+                .addOnFailureListener {
+                    onCompleted(false)
+                }
+        }
+        fun getReactNum(uid: String, pid: String, onCompleted: (String) -> Unit){
+            db.collection("users")
+                .document(uid)
+                .collection("posts")
+                .document(pid)
+                .collection("reacted")
+                .get()
+                .addOnSuccessListener { docs ->
+                    val doc = docs.size()
+                    onCompleted(doc.toString())
+                }
+                .addOnFailureListener {
+                    onCompleted("0")
+                }
+        }
+        fun cancelJoinRequest(uid: String, myuid: String, onCompleted: (Boolean) -> Unit){
+            db.collection("journeys")
+                .document(uid)
+                .collection("pending")
+                .document(myuid)
+                .delete()
+                .addOnSuccessListener {
+                    onCompleted(true)
+                }
+        }
+        fun deletePost(uid: String, postID: String,onCompleted: (Boolean) -> Unit){
+            db.collection("users")
+                .document(uid)
+                .collection("posts")
+                .document(postID)
+                .delete()
+                .addOnSuccessListener {
+                    onCompleted(true)
+                }
+        }
+        fun getProfileInfo(uid: String, onComplete: (List<String>) -> Unit) {
+            db.collection("users")
+                .document(uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    val list = mutableListOf<String>()
+                    val email = document.getString("email")
+                    val phone = document.getString("phone")
+                    val address = document.getString("address")
+                    val nationality = document.getString("nationality")
+                    val interests = document.getString("interests")
+                    val gender = document.getString("gender")
+                    val destinations = document.getString("destinations")
+                    val seasons = document.getString("seasons")
+                    val duration = document.getString("duration")
+                    val budget = document.getString("budget")
+                    list.add(email ?: "")
+                    list.add(phone ?: "")
+                    list.add(address ?: "")
+                    list.add(nationality ?: "")
+                    list.add(interests ?: "")
+                    list.add(gender ?: "")
+                    list.add(destinations ?: "")
+                    list.add(seasons ?: "")
+                    list.add(duration ?: "")
+                    list.add(budget ?: "")
+                    onComplete(list)
+                }
+                .addOnFailureListener {
+                    onComplete(emptyList())
+                }
+        }
         fun get_docs_info(collection: String, documentt: String, callback: (Map<String, Any>?) -> Unit) {
             val currentUser = getCurrentUser()
             if (currentUser != null) {
@@ -981,6 +1090,29 @@ class Firebase {
                     } else {
                         onFailure(task.exception!!)
                     }
+                }
+        }
+        fun remove_friend(uid: String, myuid: String,onCompleted: (Boolean) -> Unit){
+            db.collection("users")
+                .document(uid)
+                .collection("friends")
+                .document(myuid)
+                .delete()
+                .addOnSuccessListener {
+                    db.collection("users")
+                        .document(myuid)
+                        .collection("friends")
+                        .document(uid)
+                        .delete()
+                        .addOnSuccessListener {
+                            onCompleted(true)
+                        }
+                        .addOnFailureListener {
+                            onCompleted(false)
+                        }
+                }
+                .addOnFailureListener {
+                    onCompleted(false)
                 }
         }
         fun addFriend(uid: String, context: Context,callback: (Boolean) -> Unit) {
@@ -1056,6 +1188,49 @@ class Firebase {
                     }
                 }
             }
+        }
+        fun getUserNotification(uid: String, onComplete: (List<user_notification_model>) -> Unit) {
+            db.collection("users")
+                .document(uid)
+                .collection("notification")
+                .get()
+                .addOnSuccessListener { documents ->
+                    val notifications = mutableListOf<user_notification_model>()
+                    for (document in documents) {
+                        val text = document.getString("text") ?: ""
+                        val timestamp = document.getDate("timestampField") ?: Date()
+                        val notification = user_notification_model(text, timestamp)
+                        notifications.add(notification)
+                    }
+                    notifications.sortByDescending { it.timestampField }
+                    onComplete(notifications)
+                }
+                .addOnFailureListener { exception ->
+                    println("Error getting documents: $exception")
+                    onComplete(emptyList())
+                }
+        }
+
+        fun createUserNotification(uid: String,text: String){
+            val data = hashMapOf(
+                "text" to text,
+                "timestampField" to FieldValue.serverTimestamp()
+            )
+            db.collection("users")
+                .document(uid)
+                .collection("notification")
+                .add(data)
+        }
+        fun createUserReactNotification(uid: String,pid: String,text: String){
+            val data = hashMapOf(
+                "text" to text,
+                "timestampField" to FieldValue.serverTimestamp()
+            )
+            db.collection("users")
+                .document(uid)
+                .collection("notification")
+                .document(pid)
+                .set(data)
         }
         fun getNotifications(journeyID: String, onComplete: (List<notification_model>) -> Unit) {
             db.collection("journeys")

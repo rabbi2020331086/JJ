@@ -1,4 +1,5 @@
 package com.journeyjunctionxml
+import android.content.ContentValues.TAG
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -6,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isInvisible
 import androidx.navigation.NavController
@@ -28,8 +30,13 @@ class journey_page_members_adapter(private val type: String,private val context:
         holder.name.text = currentUser.name
         holder.icon.text = currentUser.name.firstOrNull().toString()
         holder.addfriend.isInvisible = true
-        val myuid = Firebase.getCurrentUser()?.uid
         if(type == "members") {
+            val uid = currentUser.uid
+            val myuid = Firebase.getCurrentUser()?.uid.toString()
+            var myname =""
+            Firebase.getuserinfo(myuid,"name", onCompleted = {name ->
+                myname = name
+            })
             if (!(myuid != null && currentUser.uid == myuid)) {
                 Firebase.checkIfFriendExists(currentUser.uid, onCompleted = { isFriend ->
                     if (isFriend) {
@@ -37,7 +44,8 @@ class journey_page_members_adapter(private val type: String,private val context:
                         holder.addfriend.setImageResource(R.drawable.add_friend_done_icon)
                     } else {
                         Firebase.checkIfSentFriendExists(currentUser.uid, onCompleted = {
-                            if (true) {
+                            istrue ->
+                            if (istrue) {
                                 holder.addfriend.isInvisible = false
                                 holder.addfriend.setImageResource(R.drawable.add_friend_done_icon)
                             } else {
@@ -58,6 +66,7 @@ class journey_page_members_adapter(private val type: String,private val context:
                 if (boolean == 1) {
                     Firebase.addFriend(currentUser.uid, context, callback = { done ->
                         if (done) {
+                            Firebase.createUserNotification(uid,"\"$myname\" send you friend request.")
                             boolean = 0
                             holder.addfriend.isInvisible = false
                             holder.addfriend.setImageResource(R.drawable.add_friend_done_icon)
@@ -75,12 +84,23 @@ class journey_page_members_adapter(private val type: String,private val context:
             val uid = currentUser.uid
             val name = currentUser.name
             val journeyID = DataClass.journeyUID
+            val myuid = Firebase.getCurrentUser()?.uid.toString()
             holder.reject_friend.visibility = View.VISIBLE
             holder.addfriend.visibility = View.VISIBLE
+            var myname =""
+            var journeyTitle = ""
+            Firebase.getuserinfo(myuid,"name", onCompleted = {name ->
+                myname = name
+            })
+            Firebase.getJourneyFields(journeyID,"title", onCompleted = {title ->
+                journeyTitle = title
+            })
             holder.addfriend.setOnClickListener {
                 if(!ispending)
                     return@setOnClickListener
                 Firebase.move_user_in_journey("pending","members",uid,journeyID, onCompleted = {istrue ->
+                    Log.d(TAG,"entering")
+                    Firebase.createUserNotification(uid,"\"$myname\" accepted your join request to \"$journeyTitle\"")
                     ispending = false
                     holder.reject_friend.visibility = View.GONE
                     holder.addfriend.setImageResource(R.drawable.add_friend_done_icon)
@@ -91,6 +111,7 @@ class journey_page_members_adapter(private val type: String,private val context:
                 if(ispending){
                     Firebase.delete_journey_user("pending",journeyID,uid, onCompleted = {istrue ->
                         if(istrue){
+                            Firebase.createUserNotification(uid,"An admin rejected your join request to \"$journeyTitle\"")
                             ispending = false
                             holder.reject_friend.visibility = View.GONE
                             holder.addfriend.visibility = View.GONE

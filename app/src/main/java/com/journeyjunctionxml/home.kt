@@ -22,6 +22,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.PopupWindow
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.navigation.fragment.findNavController
@@ -58,6 +59,11 @@ class home : Fragment() {
         val searh_button = view.findViewById<ImageButton>(R.id.searchButton)
         val journeys = view.findViewById<ImageButton>(R.id.journeys)
         val navController = findNavController()
+        val home = view.findViewById<ImageButton>(R.id.home_button)
+        home.setOnClickListener {
+            findNavController().navigate(R.id.action_home2_self)
+        }
+
         journeys.setOnClickListener {
             findNavController().navigate(R.id.action_home2_to_all_journeys)
         }
@@ -71,7 +77,7 @@ class home : Fragment() {
                     cnt++
                     if (cnt == friends.size) {
                         recyclerView = view.findViewById(R.id.recyclerView)
-                        adapter = HomeItemAdapter(requireContext(), navController, list.toList())
+                        adapter = HomeItemAdapter("home",requireContext(), navController, list.toList())
                         recyclerView.adapter = adapter
                         recyclerView.layoutManager = LinearLayoutManager(requireContext())
                     }
@@ -91,14 +97,15 @@ class home : Fragment() {
             val createPostButton = customView.findViewById<Button>(R.id.sidebar_create_post)
             val friends_button = customView.findViewById<Button>(R.id.sidebar_friend_management_button)
 
+            val profile_name = customView.findViewById<TextView>(R.id.sidebar_profile_name)
+            Firebase.getuserinfo(myuid,"name", onCompleted = {name ->
+                profile_name.setText(name)
+            })
 
             friends_button.setOnClickListener {
                 findNavController().navigate(R.id.action_home2_to_friend_management)
                 popupWindow.dismiss()
             }
-
-
-
             createPostButton.setOnClickListener {
                 createPost(requireContext())
                 popupWindow.dismiss()
@@ -121,26 +128,17 @@ class home : Fragment() {
             popupWindow.showAtLocation(view, Gravity.END, 0, 0)
             val profile_button = customView.findViewById<ImageView>(R.id.sidebar_profileIcon)
             profile_button.setOnClickListener {
+                DataClass.profileUID = myuid
                 findNavController().navigate(R.id.action_home2_to_profile)
                 popupWindow.dismiss()
             }
-            val toolspot = customView.findViewById<Button>(R.id.sidebar_discover)
             val launch_journey = customView.findViewById<Button>(R.id.sidebar_create_trip)
             val my_trip = customView.findViewById<Button>(R.id.sidebar_mytrips)
-            val keeps_note = customView.findViewById<Button>(R.id.sidebar_keep_notes)
-            val my_tools = customView.findViewById<Button>(R.id.sidebar_mytools)
-            val settings = customView.findViewById<Button>(R.id.sidebar_settings_button)
             val help_and_support = customView.findViewById<Button>(R.id.sidebar_help_button)
 
             my_trip.setOnClickListener {
                 findNavController().navigate(R.id.action_home2_to_my_trips)
                 popupWindow.dismiss()
-            }
-
-            if (Firebase.idtype == "explorer") {
-                launch_journey.visibility = View.GONE
-            } else {
-                toolspot.visibility = View.VISIBLE
             }
             launch_journey.setOnClickListener {
                 findNavController().navigate(R.id.action_home2_to_create_journey)
@@ -155,12 +153,8 @@ class home : Fragment() {
             findNavController().navigate(R.id.action_home2_to_profile)
         }
         notification_button.setOnClickListener {
-            findNavController().navigate(R.id.action_home2_to_journey_page)
+            findNavController().navigate(R.id.action_home2_to_user_notification)
         }
-//        recyclerView = view.findViewById(R.id.recyclerView)
-//        adapter = HomeItemAdapter()
-//        recyclerView.adapter = adapter
-//        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         return view;
     }
     private fun createPost(context: Context) {
@@ -169,7 +163,12 @@ class home : Fragment() {
         val dialog = Dialog(context)
         dialog.setContentView(dialogView)
         val discard = dialogView.findViewById<Button>(R.id.create_post_discard_button)
+        val uid = Firebase.getCurrentUser()?.uid.toString()
         val done = dialogView.findViewById<Button>(R.id.create_post_done_button)
+        val name = dialogView.findViewById<TextView>(R.id.create_post_name)
+        Firebase.getuserinfo(uid,"name", onCompleted = {nm ->
+            name.setText(nm)
+        })
         popupimage = dialogView.findViewById(R.id.create_post_image)
         val privacybutton = dialogView.findViewById<Button>(R.id.create_post_privacy_button)
         privacybutton.setOnClickListener {

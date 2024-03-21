@@ -10,6 +10,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Delete"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:id="@+id/delete_post"
+            android:visibility="gone"
+            android:background="@drawable/bg_edit_profile"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginRight="10dp"
         android:padding="2dp">
@@ -43,17 +60,16 @@
             android:textColor="#000000"
             android:textSize="18sp" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-        <ImageButton
-            android:id="@+id/post_template_add_friend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/add_friend_icon"
-            android:background="@android:color/transparent"
-            android:contentDescription="profile"/>
+        <TextView
+            android:id="@+id/post_item_timestamp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|end"
+            android:paddingEnd="10dp"
+            android:text=""
+            android:textSize="16sp"
+            android:textColor="#ff0000"
+            android:textStyle="normal"/>
     </LinearLayout>
 
     <View
@@ -88,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="1dp"
         android:id="@+id/post_item_image"
-        android:src="@drawable/get_started_pic"
+        android:src="@drawable/loading_image"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter">
     </ImageView>
@@ -97,17 +113,44 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/rounded_bottom_background">
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="#ff0000"
-            android:text="react"
-            android:textSize="20sp"
+        android:layout_marginTop="5dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:id="@+id/cnt_react"
+            android:text="(50)"
+            android:textSize="15sp"
+            android:textColor="#000000">
+        </TextView>
+        <FrameLayout
+            android:layout_width="60dp"
+            android:id="@+id/post_item_react_done_layout_button"
+            android:visibility="gone"
+            android:layout_height="60dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/round_background" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="❤️"
+                android:textSize="35sp"
+                android:textColor="#70CCD9"
+                android:textStyle="bold">
+            </TextView>
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="60dp"
             android:id="@+id/post_item_react_button"
-            android:textColor="#ffffff">
-        </Button>
+            android:layout_height="60dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/heart_icon" />
+        </FrameLayout>
     </LinearLayout>
 
     <TextView

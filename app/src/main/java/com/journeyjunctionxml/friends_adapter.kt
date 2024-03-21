@@ -24,6 +24,15 @@ class friends_adapter(navController: NavController,private val userList: List<se
     override fun onBindViewHolder(holder: friends_adapter.ViewHolder, position: Int) {
         val currentUser = userList[position]
         holder.name.setText(currentUser.name)
+        val uid = currentUser.uid
+        val myuid = Firebase.getCurrentUser()?.uid.toString()
+        holder.imagebutton.setImageResource(R.drawable.reject_friend_icon)
+        holder.imagebutton.setOnClickListener {
+            Firebase.remove_friend(myuid,uid, onCompleted = {istrue ->
+                if(istrue)
+                    holder.imagebutton.visibility = View.GONE
+            })
+        }
     }
     override fun getItemCount(): Int {
         return userList.size

@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import android.content.Context
 import android.widget.Toast
-import androidx.core.view.isInvisible
 import androidx.navigation.NavController
 class searchItemAdapter(private val context: Context, private val navController: NavController, private val userList: List<search_users_model>) :
     RecyclerView.Adapter<searchItemAdapter.searchViewHolder>() {
@@ -25,22 +24,29 @@ class searchItemAdapter(private val context: Context, private val navController:
         val currentUser = userList[position]
         holder.name.text = currentUser.name
         holder.icon.text = currentUser.name.firstOrNull().toString()
-        holder.addfriend.isInvisible = true
+        holder.addfriend.visibility = View.GONE
         val myuid = Firebase.getCurrentUser()?.uid
+
+        val uid = currentUser.uid
+        var myname =""
+        Firebase.getuserinfo(myuid.toString(),"name", onCompleted = {name ->
+            myname = name
+        })
+
         if (!(myuid != null && currentUser.uid == myuid)) {
             Firebase.checkIfFriendExists(currentUser.uid, onCompleted = {
                     isFriend ->
                 if(isFriend){
-                    holder.addfriend.isInvisible = true
+                    holder.addfriend.visibility = View.GONE
                 }
                 else{
                     Firebase.checkIfSentFriendExists(currentUser.uid, onCompleted = {isval ->
                         if(isval){
-                            holder.addfriend.isInvisible = false
+                            holder.addfriend.visibility = View.GONE
                         }
                         else{
                             boolean = 1
-                            holder.addfriend.isInvisible = false
+                            holder.addfriend.visibility = View.VISIBLE
                             holder.addfriend.setImageResource(R.drawable.add_friend_icon)
                         }
                     })
@@ -56,8 +62,9 @@ class searchItemAdapter(private val context: Context, private val navController:
                 Firebase.addFriend(currentUser.uid,context, callback = {
                     done->
                         if(done){
+                            Firebase.createUserNotification(uid,"\"$myname\" send you friend request.")
                             boolean = 0
-                            holder.addfriend.isInvisible = false
+                            holder.addfriend.visibility = View.VISIBLE
                             holder.addfriend.setImageResource(R.drawable.add_friend_done_icon)
                         }
                 })

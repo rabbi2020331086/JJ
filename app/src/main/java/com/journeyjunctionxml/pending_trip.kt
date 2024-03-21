@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,10 @@ class pending_trip : Fragment() {
         val view = inflater.inflate(R.layout.pending_trip, container, false)
         val navController = findNavController()
         val uid = Firebase.getCurrentUser()?.uid.toString()
+        val button = view.findViewById<Button>(R.id.my_trips_past_tour_button)
+        button.setOnClickListener {
+            findNavController().navigate(R.id.action_pending_trip_to_my_trips)
+        }
         Firebase.get_upcoming_tour(requireContext(),"pending", uid, onComplete = {
                 list ->
             if(!list.isEmpty()){

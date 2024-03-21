@@ -13,6 +13,7 @@
         android:layout_marginHorizontal="2dp"
         android:id="@+id/post_item_image"
         android:layout_marginBottom="10dp"
+        android:background="@drawable/loading_image"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter">
     </ImageView>

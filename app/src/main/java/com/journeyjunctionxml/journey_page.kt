@@ -61,15 +61,22 @@ class journey_page : Fragment() {
         val members = view.findViewById<ImageView>(R.id.journey_page_members)
         val notice = view.findViewById<ImageButton>(R.id.journey_page_notifications)
 
+        Firebase.getJourneyFields(DataClass.journeyUID,"title", onCompleted = {titles ->
+            title.setText(titles)
+        })
+        Firebase.getJourneyFields(DataClass.journeyUID,"date", onCompleted = {titles ->
+            event_date.setText(titles)
+        })
+        Firebase.getJourneyFields(DataClass.journeyUID,"checkpoints", onCompleted = {titles ->
+            from.setText(titles)
+        })
+
+
         notice.setOnClickListener {
             findNavController().navigate(R.id.action_journey_page_to_journey_page_notification)
         }
 
         manage_journey.setOnClickListener {
-            if(isadmin){
-
-                return@setOnClickListener
-            }
             if(ismember){
                 Firebase.delete_journey_user("members",journeyID,uid, onCompleted = {istrue ->
                     findNavController().navigate(R.id.action_journey_page_self)
@@ -77,6 +84,12 @@ class journey_page : Fragment() {
                 return@setOnClickListener
             }
             if(wannabeMember){
+                Firebase.cancelJoinRequest(DataClass.journeyUID,uid, onCompleted = {istrue ->
+                    if(istrue){
+                        manage_journey.setText("Ask to join")
+                        wannabeMember = false
+                    }
+                })
 
                 return@setOnClickListener
             }
@@ -117,7 +130,7 @@ class journey_page : Fragment() {
                                     LoadJourney()
                                     isadmin = true
                                     manage_journey.setText("Manage Journey")
-                                    manage_journey.visibility = View.VISIBLE
+                                    manage_journey.visibility = View.GONE
                                     buttons_layout.visibility = View.VISIBLE
                                 }
                                 else{

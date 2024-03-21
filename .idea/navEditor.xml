@@ -185,6 +185,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_home2_self">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_home2_to_all_journeys">
                               <value>
                                 <LayoutPositions />
@@ -236,6 +241,11 @@
                               </value>
                             </entry>
                             <entry key="action_home2_to_search_page">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_home2_to_user_notification">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -318,6 +328,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_journey_page_notification_self">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_journey_page_notification_to_journey_page">
                               <value>
                                 <LayoutPositions />
@@ -333,8 +348,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="965" />
-                            <option name="y" value="-1493" />
+                            <option name="x" value="644" />
+                            <option name="y" value="-1440" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -463,8 +478,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="101" />
-                            <option name="y" value="-445" />
+                            <option name="x" value="-210" />
+                            <option name="y" value="-981" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -541,8 +556,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-448" />
-                            <option name="y" value="777" />
+                            <option name="x" value="-456" />
+                            <option name="y" value="571" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -590,7 +605,17 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_profile_to_my_photos2">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_profile_to_sign_in">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_profile_to_timeLine">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -705,6 +730,39 @@
                               </value>
                             </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="timeLine">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1363" />
+                            <option name="y" value="384" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_timeLine_self">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="user_notification">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1412" />
+                            <option name="y" value="-767" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>

@@ -123,6 +123,12 @@
         <action
             android:id="@+id/action_home2_to_journeys_member_check"
             app:destination="@id/journeys_member_check" />
+        <action
+            android:id="@+id/action_home2_to_user_notification"
+            app:destination="@id/user_notification" />
+        <action
+            android:id="@+id/action_home2_self"
+            app:destination="@id/home2" />
     </fragment>
     <fragment
         android:id="@+id/profile"
@@ -141,6 +147,12 @@
         <action
             android:id="@+id/action_profile_to_my_photos"
             app:destination="@id/my_photos" />
+        <action
+            android:id="@+id/action_profile_to_my_photos2"
+            app:destination="@id/my_photos" />
+        <action
+            android:id="@+id/action_profile_to_timeLine"
+            app:destination="@id/timeLine" />
     </fragment>
     <fragment
         android:id="@+id/my_photos"
@@ -318,7 +330,14 @@
         android:id="@+id/pending_trip"
         android:name="com.journeyjunctionxml.pending_trip"
         android:label="pending_trip"
-        tools:layout="@layout/pending_trip" />
+        tools:layout="@layout/pending_trip" >
+        <action
+            android:id="@+id/action_pending_trip_to_my_past_trip"
+            app:destination="@id/my_past_trip" />
+        <action
+            android:id="@+id/action_pending_trip_to_my_trips"
+            app:destination="@id/my_trips" />
+    </fragment>
     <fragment
         android:id="@+id/journey_page_pending_request"
         android:name="com.journeyjunctionxml.journey_page_pending_request"
@@ -339,5 +358,19 @@
         <action
             android:id="@+id/action_journey_page_notification_self"
             app:destination="@id/journey_page_notification" />
+    </fragment>
+    <fragment
+        android:id="@+id/user_notification"
+        android:name="com.journeyjunctionxml.user_notification"
+        android:label="user_notification"
+        tools:layout="@layout/user_notification" />
+    <fragment
+        android:id="@+id/timeLine"
+        android:name="com.journeyjunctionxml.timeLine"
+        android:label="timeline"
+        tools:layout="@layout/timeline" >
+        <action
+            android:id="@+id/action_timeLine_self"
+            app:destination="@id/timeLine" />
     </fragment>
 </navigation>

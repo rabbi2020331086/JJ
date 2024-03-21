@@ -1,0 +1,103 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="#0DCDD9"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageButton
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/back_left_icon"
+                        android:contentDescription="Back"
+                        android:id="@+id/edit_field_back_button">
+                    </ImageButton>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Edit Profile"
+                        android:layout_marginEnd="48dp"
+                        android:textAlignment="center"
+                        android:id="@+id/journey_page_popup_title"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="#ffffff"
+                        android:textSize="25dp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="3dp"
+                    android:background="#ffffff"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/journey_page_popup_spinner"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/even_round_bg"
+                        android:padding="5dp"
+                        android:textAlignment="textStart"
+                        android:textColor="#000000"
+                        android:textColorHint="#000000"
+                        android:textSize="15sp" />
+                    <EditText
+                        android:id="@+id/journey_page_popup_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/even_round_bg"
+                        android:hint="Write your changes.."
+                        android:minHeight="40dp"
+                        android:layout_marginStart="5dp"
+                        android:padding="5dp"
+                        android:paddingHorizontal="5dp"
+                        android:textAlignment="textStart"
+                        android:textColor="#000000"
+                        android:textColorHint="#000000"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/create_post_done_button"
+                        android:layout_width="360dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_edit_profile"
+                        android:text="Done"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

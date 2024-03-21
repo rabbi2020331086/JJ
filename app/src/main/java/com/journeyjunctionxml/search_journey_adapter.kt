@@ -43,6 +43,8 @@ class search_journey_adapter(private val context: Context,private val from: Stri
         holder.vacancy.text = currentUser.vacancy
         holder.gender.text = currentUser.gender
         holder.accept_button.visibility = View.GONE
+        holder.vacancy.setText("Available")
+        holder.duration.visibility = View.GONE
         Firebase.isInMyPending(uid,journeyID, onCompleted = {istrue ->
             if(istrue){
                 holder.accept_button.visibility = View.VISIBLE

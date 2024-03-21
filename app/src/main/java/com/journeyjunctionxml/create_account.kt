@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 
 class create_account : Fragment() {
     override fun onCreateView(
@@ -58,6 +59,9 @@ class create_account : Fragment() {
             }
             Firebase.createAccount(email,password,name,type,
                 onSuccess = {
+                    sendEmailVerification(onComplete = {istrue ->
+                        Toast.makeText(requireContext(), "Please verify your email..", Toast.LENGTH_SHORT).show()
+                    })
                     findNavController().navigate(R.id.action_create_account_to_home2)
                 },
                 onFailure = {Exception ->
@@ -66,5 +70,15 @@ class create_account : Fragment() {
             )
         }
         return view
+    }
+    fun sendEmailVerification(onComplete: (Boolean) -> Unit) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        currentUser?.sendEmailVerification()?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                onComplete(true)
+            } else {
+                onComplete(false)
+            }
+        }
     }
 }

@@ -53,7 +53,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical|end"
             android:paddingEnd="10dp"
-            android:text="Timestamp"
+            android:text=""
             android:textSize="16sp"
             android:textColor="#ff0000"
             android:textStyle="normal"/>
